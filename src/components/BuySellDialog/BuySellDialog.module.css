@@ -1,0 +1,360 @@
+
+.BuySellDialog {
+  
+    width: 100%;
+    box-sizing: border-box;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left:15px;
+    padding-right:15px;
+    background-color: #1E2024;
+    margin-bottom: 20px;
+    
+}
+
+.group_bsdlg_l1 {
+    background-color: #1E2024;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.buttonshortselected {
+    cursor: pointer;)
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px var(--negative-sell-color),
+        0px 0px 12px 0px var(--negative-sell-color-darker) inset,
+        0px 0px 20px 0px var(--negative-sell-color-dark);
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    color: var(--negative-sell-color);
+    border-color: var(--negative-sell-color);
+    background-color: var(--negative-sell-color-muchdarker);
+    transition: color 0.3s;
+    
+    border-width: 0px;
+    border-style: outset;
+    border-image: initial;
+    z-index: 100;
+}
+
+.buttonlongselected{
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px var(--positive-buy-color),
+        0px 0px 12px 0px var(--positive-buy-color-darker) inset,
+        0px 0px 20px 0px var(--positive-buy-color-dark);
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    color: var(--positive-buy-color);
+    border-color: var(--positive-buy-color);
+    background-color:var(--positive-buy-color-muchdarker) ; 
+    
+    transition: color 0.3s;
+    border-width: 0px;
+    border-style: outset;
+    border-image: initial;
+    z-index: 100;
+}
+.buttonneutral {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+    border:none;
+    
+    height: 48px;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 0;
+    border-radius: 10px;
+    color:#D9D9D999;
+    transition: color 0.3s;
+    appearance: auto;
+    text-rendering: auto;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    
+
+
+background-color: #2A2D32;
+z-index: 0;
+    
+}
+
+
+
+.group_bsdlg_l2{
+    color: var(--main-text-color);
+    display: flex;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    justify-content: center;
+    line-height: normal;
+    margin-top: 10px;
+   
+}
+
+
+.group_bsdlg_l3{
+    color: #D9D9D999;
+    display: flex;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    justify-content: center;
+    line-height: normal;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.group_bsdlg_l4{
+    color: #D9D9D999;
+    display: flex;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    justify-content: center;
+    line-height: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.numberinput{
+    background-color: #2A2D32;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 1200;
+    text-transform: uppercase;
+    width: 50%;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    line-height: normal;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+   
+    border-width: 1px;
+    text-align: center;
+    margin-right: 20px;
+    border: 0px;
+    &::-webkit-inner-spin-button {
+                width: 30%;
+                border-left: 1px solid #BBB;
+                opacity: .5;
+                /* shows Spin Buttons per default (Chrome >= 39) */
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right:0;
+    }
+}
+
+.formrange {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -webkit-appearance: none;
+    /* Override default CSS styles */
+    appearance: none;
+    width: 100%;
+    /* Full-width */
+    height: 10px;
+    border-radius: 5px;
+    /* Specified height */
+    background: linear-gradient(90deg, #00509d 0%,#e66022 50%,#8a282e 100%);
+    /* Grey background */
+    outline: none;
+    /* Remove outline */
+    opacity: 0.7;
+    /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s;
+    /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+
+    &:hover {
+        opacity: 1;
+        /* Fully shown on mouse-over */
+    }
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        /* Override default look */
+        appearance: none;
+        width: 28px;
+        /* Set a specific slider handle width */
+        height: 28px;
+        /* Slider handle height */
+        background: white;
+        
+        /* Green background */
+        cursor: pointer;
+        /* Cursor on hover */
+        border-radius: 150%;
+    }
+}
+
+.smallbtndismiss{
+    width: 50%;
+}
+
+.multexplain1 {
+    font-size: 14px;
+    padding-right: 13px;
+    width: 50%;
+}
+
+.multexplain11 {
+    font-size: 10px;
+    padding-right: 13px;
+    width: 50%;
+}
+
+.multexplain111 {
+    font-size: 12px;
+    padding-right: 13px;
+    width: 50%;
+    color: white;
+
+}
+
+
+.multexplain2 {
+    font-size: 20px;
+    
+    background-color:  linear-gradient(45deg, blue, rgb(195, 0, 255)) ;
+    border-color: var(--main-bb-color);
+
+    border-radius: 10px;
+    padding:8px;
+    width: 50%;
+    right:0px;
+    color:white;
+    display: flex;
+    font-weight: 900;
+    justify-content: center;
+}
+
+.smallbutton {
+    background-color: #2A2D32;
+    color:#D9D9D999;
+    margin-top: 12px;
+    font-size:8px;
+    height: 16px;
+    border-radius: 8px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    line-height: normal;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    
+
+
+}
+
+.buttonlongd {
+    font-size:18px;
+    height: 46px;
+    border-radius: 10px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    line-height: normal;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    background: var(--positive-buy-color);
+}
+
+.buttonshortd {
+    font-size:18px;
+    height: 46px;
+    border-radius: 10px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    align-items: center;
+    box-sizing: border-box;
+    user-select: none;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    line-height: normal;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    background: var(--negative-sell-color);;
+    
+}

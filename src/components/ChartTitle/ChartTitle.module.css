@@ -1,0 +1,54 @@
+.charttitle {
+ align-content: center;
+ 
+
+}
+
+.indextitle{
+    color: var(--main-text-highlight-color);
+    font-size: 28px;
+    font-weight: 600;
+
+}
+
+.indextitlesmall{
+    color: var(--main-text-highlight-color);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.indexvalue {
+    color: var(--main-text-highlight-color);
+    font-size: 28px;
+    font-weight: 800;
+
+}
+
+.indexup {
+    color: var(--positive-buy-color);
+    font-size: 28px;
+    font-weight: 800;
+
+}
+
+.indexdown {
+    color: var(--negative-sell-color);
+    font-size: 28px;
+    font-weight: 800;
+
+}
+
+
+
+.indexchange {
+    color: var(--main-text-color);
+    font-size: 14px;
+    font-weight: 800;
+ 
+}
+
+.aptlogo{
+    width: 20px;
+    height: 20px;
+}

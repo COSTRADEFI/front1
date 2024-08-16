@@ -1,0 +1,364 @@
+/* Add a background color to match the chart */
+/*
+/*scheme1: bb deuteranopia
+
+
+--positive-buy-color: #0089e9;
+--positive-buy-color-dark: rgba(159, 229, 110, 0.30);
+--positive-buy-color-darker: rgba(159, 229, 110, 0.20) ;
+--positive-buy-color-muchdarker: #9fe56e1a ;
+
+--negative-sell-color: #cd4b4b;
+--negative-sell-color-dark: rgba(238, 101, 101, 0.30);
+--negative-sell-color-darker: rgba(238, 101, 101, 0.20) ;
+--negative-sell-color-muchdarker: rgba(238, 101, 101, 0.10);
+
+    
+
+--main-bb-color: #ffa028;
+
+scheme2:
+--positive-buy-color: #0089e9;
+--negative-sell-color: #fa5a28;
+
+--main-bb-color: #feba11;
+--positive-buy-color: #0089e9;
+--positive-buy-color-dark:#0075c9;
+--positive-buy-color-darker: #004d85;
+--positive-buy-color-muchdarker: #01253f ;
+
+--negative-sell-color: #cd4b4b;
+--negative-sell-color-dark: rgba(153, 78, 78, 0.3);
+--negative-sell-color-darker: rgba(238, 101, 101, 0.20) ;
+--negative-sell-color-muchdarker: rgba(238, 101, 101, 0.10);
+
+
+
+scheme3:
+--positive-buy-color: #96e562;
+
+--positive-buy-color-dark: rgba(159, 229, 110, 0.30);
+--positive-buy-color-darker: rgba(159, 229, 110, 0.20) ;
+--positive-buy-color-muchdarker: #9fe56e1a ;
+<<<<<<< HEAD
+
+--negative-sell-color: #ff6c66;
+--negative-sell-color-dark: rgba(238, 101, 101, 0.30);
+--negative-sell-color-darker: rgba(238, 101, 101, 0.20) ;
+--negative-sell-color-muchdarker: rgba(238, 101, 101, 0.10);
+
+=======
+
+--negative-sell-color: #ff6c66;
+--negative-sell-color-dark: rgba(238, 101, 101, 0.30);
+--negative-sell-color-darker: rgba(238, 101, 101, 0.20) ;
+--negative-sell-color-muchdarker: rgba(238, 101, 101, 0.10);
+
+>>>>>>> c1518c41c2318186cec197ecdcb40133c365e6e6
+--main-bb-color: #ffa028;
+--main-text-color:  #D9D9D999;
+--main-text-highlight-color: #ffffff;
+
+5c9e29
+
+
+*/
+
+
+:root {
+  
+  --positive-buy-color: #5c9e29;
+  
+  --positive-buy-color-dark: #8de056af;
+  --positive-buy-color-darker: #8de05659;
+  --positive-buy-color-muchdarker: #9fe56e1a ;
+  
+  --negative-sell-color: #fa5a28;
+  --negative-sell-color-dark: rgba(238, 101, 101, 0.30);
+  --negative-sell-color-darker: rgba(238, 101, 101, 0.20) ;
+  --negative-sell-color-muchdarker: rgba(238, 101, 101, 0.10);
+  
+
+
+
+--main-bb-color: #ffa028;
+--main-bb-color-light:#feba11;
+  --main-text-color:  #D9D9D999;
+  --main-text-highlight-color: #ffffff;
+  --negative-box-shadow: rgba(238, 101, 101, 0.7);
+  
+
+}
+
+body {
+  background-color: #111414;
+  margin: 10;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+
+.chartcompo{ 
+  background-color:#111414;
+  z-index: 0  ;
+  padding:10px;
+  margin:10px;
+  border-radius: 10px;
+}
+
+.BSDialog{
+  position: absolute;
+  box-sizing: border-box;
+  top:120px;
+  
+  right: 20px;
+  height: 533px;
+  width: 260px;
+  z-index: 100;
+   
+   
+}
+
+.clickablearea{
+  position: absolute;
+  top: 0px;
+  height: 300px;
+  z-order:100;
+}
+
+.mobileBSDialog{
+  position: absolute;
+  bottom:160px;
+  height: 300px;
+  width: 100%;
+  border-radius: 10px;
+  z-index:250;
+  padding:0px;
+  margin:0px
+}
+
+
+.col1w{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.mobileViewPosition{
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+   
+}
+
+.deskViewPosition{
+ 
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+ 
+}
+
+.choicebs {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  z-index: 250;
+   
+
+}
+
+.choicebuttons{
+  display: inline-block;
+}
+
+
+.choicebutton{
+  font-size:18px;
+  height: 46px;
+  border-radius: 10px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  width: 140px;
+  align-items: center;
+  box-sizing: border-box;
+  user-select: none;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  line-height: normal;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  transition: all var(--durations-1);
+  
+}
+
+.buybutton {
+    background: var(--positive-buy-color);
+    
+
+}
+
+.sellbutton  {
+    background:var(--negative-sell-color);
+    
+
+
+} 
+
+
+.notifsmall {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(8, 6, 2);
+  height: 100px;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+.notifbar {
+  color: rgb(8, 6, 2);;
+  display: flex;
+  font-size: 32px;
+  font-weight: 200;
+  text-transform: uppercase;
+  align-items: center;
+}
+
+
+
+
+@-webkit-keyframes borderBlink {
+
+  from,
+  to {
+    border-color: transparent;
+    
+  }
+
+  50% {
+    border-color: white;
+    
+  }
+}
+
+@keyframes borderBlink {
+
+  from,
+  to {
+    border-color: transparent
+  }
+
+  50% {
+    border-color: white;
+  }
+}
+
+.borderBlink {
+  border: 3px solid white;
+  /* add 'border-color: transparent' if you wish no border to show initially */
+  -webkit-animation: borderBlink 2s step-end infinite;
+  animation: borderBlink 2s step-end infinite;
+  
+}
+
+
+.wallet-button {
+  margin: 2px;
+  padding: 10px;
+  min-width: 25px;
+  max-width: 100pc;
+  min-height: 25px;
+  border-color: var(--main-bb-color);
+  border-width: 2px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, var(--main-bb-color), var(--main-bb-color));
+  color: #000000 ;
+  font-size:14px ;
+}
+
+.button {
+  padding: 10px;
+  min-width: 25px;
+  max-width: 100pc;
+  min-height: 55px;
+  font-size: large;
+  font-weight: bold;
+  margin: 10px;
+  color: #000000;
+  background: linear-gradient(45deg, var(--main-bb-color), var(--main-bb-color));
+  border-color: var(--main-bb-color);
+}
+
+.basic-menu {
+  padding: 5px;
+  margin: 0px;
+  border-radius: 10px !important;
+  font-size: 40px;
+  font-weight: bold;
+  background-color:var(--main-bb-color-light) ;
+  color: #000000;
+  background-color: #010b0f;
+}
+
+.menuitem {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px !important;
+  font-weight: bold;
+  color: #000000;
+  background-color: var(--main-bb-color-light) !important;
+}
+
+.MuiMenu-root ul {
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px !important;
+  padding: 0px;
+  margin: 0px;
+}
+
+.MuiPaper-root {
+  color: var(--main-bb-color);
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 10px !important;
+  
+  padding: 0px;
+  margin: 0px;
+}
+
+.MuiButton-root {
+  color: var(--main-bb-color);
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 10px !important;
+  padding: 0px;
+  margin: 0px;
+}
+
+.dialogconnect{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 10%;
+  background-color: #921212;
+  z-index: 1000;
+  
+    
+}

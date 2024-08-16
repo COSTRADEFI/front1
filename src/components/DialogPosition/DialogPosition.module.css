@@ -1,0 +1,81 @@
+.dialogpositionlarge {
+  text-align: center;
+  background-color: #1E2024;
+  border-radius: 10px;
+  margin: 5px;
+  width: 100%;
+}
+
+.dialogpositionsmall {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  
+  text-align: center;
+  background-color: #1E2024;
+  justify-content: center ;
+  text-align: center;
+  }
+
+  .container {
+    width: 100%; /* Can be in percentage also. */
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    justify-content: center ;
+    text-align: center;
+}
+
+.aptlogo{
+  width: 20px;
+  height: 20px;
+}
+.minwi5
+{
+  min-width: 45px;
+}
+
+.dialogposition{
+  justify-content: center;
+  text-align: center;
+}
+
+.textnormal{
+  color: var(--main-text-color) ;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+  text-align: center;
+  align-items: center;
+}
+
+
+.textnormaldata{
+  color: var(--main-text-highlight-color);
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+  align-items: center;
+}
+
+
+.texthighlighted{
+
+  background-color: var(--main-bb-color);
+  font-size: larger;
+  font-weight: bolder;
+  color: var(--main-bg-color) important!;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.btnClose{
+  color: var(--main-bb-color) ;
+  background-color: var(--main-bg-color) ;
+  border: 1px solid var(--main-bb-color) ;
+  border-radius: 5px;
+  
+  
+  cursor: pointer;
+}
