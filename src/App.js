@@ -9,7 +9,10 @@ import { DXBX } from './aptosClient.ts';
 import InfoBar from './components/InfoBar/InfoBar.tsx';
 import  DialogPosition  from './components/DialogPosition/DialogPosition.tsx';
 import ChartTitle from './components/ChartTitle/ChartTitle.tsx';
-import {WelcomeDialog} from './components/WelcomeDialog/WelcomeDialog.tsx';
+import { WelcomeDialog } from './components/WelcomeDialog/WelcomeDialog.tsx';
+import { TradeEvents } from './components/TradeEvents/TradeEvents.jsx';
+import { getAptosClient } from "./aptosClient.ts";
+
 
 import {
     newRandomVal,
@@ -168,17 +171,19 @@ export const ChartComponent = props => {
                 
                 const date = new Date();
                 const mytime = parseInt(date.getTime() / 1000);
-                //const response = await fetch('https://api.devnet.aptoslabs.com/v1/accounts/0x7cfadf121d363b27b55636dbe10b172ec58a875baa48c0c08a7e5eaad4e4f981/resource/0x7cfadf121d363b27b55636dbe10b172ec58a875baa48c0c08a7e5eaad4e4f981::just::Message');
                 
-                const mytURL= 'https://api.devnet.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';   
+                let mynetwork=getAptosClient().config.network;
+
+                const mytURL= 'https://api.'+mynetwork+'.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';   
            //     console.log('init',mytURL);
                 const response = await fetch(mytURL);
 
-                //const response = await fetch('https://api.devnet.aptoslabs.com/v1/accounts/0x4e055af73b4813d8c84bd3d60fbe610dde405535d2a2f6809bf79730acf72fee/resource/0x4e055af73b4813d8c84bd3d60fbe610dde405535d2a2f6809bf79730acf72fee::prob_distribution::MessageRessource');
+           
                 const body = await response.text();
                 let tbody = JSON.parse(body);
                 //let mynumber = tbody?.data.my_message * 0.00001;
                 let mynumber = tbody?.data.price * 0.00001;
+               // console.log('init_random',mynumber);
 
                 dispatch(firstRandomVal( mynumber ));
                 mylastindex=mynumber;
@@ -209,14 +214,17 @@ export const ChartComponent = props => {
                 }
 
                 }
-                const mytURL= 'https://api.devnet.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';
+
+                let mynetwork=getAptosClient().config.network;
+                const mytURL= 'https://api.'+mynetwork+'.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';
                 const response = await fetch(mytURL);
                 const body = await response.text();
                 let tbody = JSON.parse(body);
 
                 //let mynumber = tbody?.data.my_message * 0.00001;
                 let mynumber = tbody?.data.price * 0.00001;
-              //  console.log('fetch_random',mynumber,mylastindex);
+                  //console.log('fetch_random',mynumber,mylastindex);
+                
                 let tf=false;
                 if (mynumber !== mylastindex){
                     mylastindex=mynumber;
@@ -224,7 +232,7 @@ export const ChartComponent = props => {
                   //  console.log('fetch_random anime',mynumber,mylastindex);
                 }
               
-              //  let tf=(mynumber!=lastrandVal)? true:false;
+                //  let tf=(mynumber!=lastrandVal)? true:false;
 
                 dispatch(newRandomVal( mynumber ));
                 updateCandle(mynumber);
@@ -244,7 +252,7 @@ export const ChartComponent = props => {
             } 
 
             const view_random = async () => {
-                const prov = new Provider(Network.DEVNET);
+                const prov = new Provider(getAptosClient().config.network);
                 const payload: ViewRequest = {
                     function: `${DXBX}::prob_distribution::get_nd_random_number`,
                     type_arguments: [],
@@ -419,7 +427,7 @@ export const ChartComponent = props => {
                // view_random(); 
                 let r=  fetch_random();
               //   console.log('update v', 0);
-            }, 1500);
+            }, 333);
             window.addEventListener('resize', handleResize);
             return () => {
                 window.removeEventListener('resize', handleResize);
@@ -484,18 +492,11 @@ export function App(props) {
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   }, []);
-
-
-
-
     return (
-         
-      <div className='myApp' >
-        
+    <div className='myApp' >
         {<WelcomeDialog> </WelcomeDialog>}
         <div onClick={() => { setshowModalDlg(false) }}>
-        
-          {isDesktop && <InfoBar /> }
+        {isDesktop && <InfoBar /> }
             <div className='chartcompo'>
             <ChartTitle mySwidth={myWidth}></ChartTitle>
                 <ChartComponent {...props} >
@@ -504,16 +505,28 @@ export function App(props) {
                             {isDesktop && <div className='BSDialog' >
                             <BuySellDialog  setDlgBuy={ setDlgBuy} isDlgBuy={isDlgBuy} /></div>}
             </div>
-            <div className='viewposition'>
+            <div >
             
-                {isDesktop ? 
-                    (<div onClick={() => { setshowModalDlg(false) }}> <div className='deskViewPosition'><DialogPosition/></div></div>) 
-                    : (
-                      <div className='mobileViewPosition' onClick={() => { setshowModalDlg(false) }} >
-                           <DialogPosition/>
-                        </div>
+            {isDesktop ? 
+                (<div onClick={() => { setshowModalDlg(false) }}> <div className='deskViewPosition'><DialogPosition /></div>
+                    
+                </div>
+                
                 )
-                }
+                : (
+                    <div className='mobileViewPosition' onClick={() => { setshowModalDlg(false) }} >
+                        <DialogPosition/>
+                    </div>
+            )
+            }
+            
+            {isDesktop &&
+                <div className='myeventsctn'>
+                    <TradeEvents>
+                    </TradeEvents>
+                </div>
+            }
+            
             </div>
             {showModalDlg && (<div className='clickablearea'> </div>)}
             {showModalDlg && (<div className='mobileBSDialog'> <BuySellDialog showModalDlg={showModalDlg} setshowModalDlg={setshowModalDlg} setDlgBuy={setDlgBuy} isDlgBuy={isDlgBuy} /></div>)}

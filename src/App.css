@@ -145,32 +145,11 @@ body {
   justify-content: center;
 }
 
-.mobileViewPosition{
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  
-  
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  
-   
-}
 
-.deskViewPosition{
- 
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
- 
-}
 
 .choicebs {
   position: absolute;
-  bottom: 100px;
+  bottom: 65px;
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -213,9 +192,7 @@ body {
 
 .sellbutton  {
     background:var(--negative-sell-color);
-    
-
-
+  
 } 
 
 
@@ -224,8 +201,9 @@ body {
   bottom: 0;
   width: 100%;
   background-color: rgb(8, 6, 2);
-  height: 100px;
+  height: 65px;
   border-radius: 10px;
+  
   z-index: 0;
 }
 
@@ -362,3 +340,43 @@ body {
   
     
 }
+
+.deskViewPosition {
+  position: relative;
+  width: 100%-20px;
+  padding: 10px;
+}
+
+.mobileViewPosition {
+  position: relative;
+  width: 100%-20px;
+    padding: 10px;
+
+
+}
+
+.myeventsctn {
+  position: relative;
+  
+  
+  border: 1px solid var(--main-bb-color); 
+  border-radius: 10px;
+width: 100%-20px;
+  padding: 10px;
+  margin: 10px;
+}
+  
+
+
+.TradeEventsWrapper{
+  
+    
+    
+    font-size: larger;
+    align-items: right;
+  
+color: var(--main-text-highlight-color);
+    
+width: 100%;
+  
+} 

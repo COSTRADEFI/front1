@@ -1,7 +1,15 @@
 .dialogpositionlarge {
-  text-align: center;
-  background-color: #1E2024;
-  width: 100%;
+  position: relative;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    background-color: #1E2024;
+    justify-content: center;
+    text-align: center;
+  border: 1px solid var(--main-bb-color);
+  border-radius: 10px;  
+  padding: 0px;
+
 }
 
 .dialogpositionsmall {
@@ -12,16 +20,20 @@
   background-color: #1E2024;
   justify-content: center ;
   text-align: center;
+    border: 1px solid var(--main-bb-color);
+    border-radius: 10px;
   }
 
   .container {
     width: 100%; /* Can be in percentage also. */
     height: auto;
-    margin: 0 auto;
-    padding: 10px;
+    margin: 0 ;
+    padding: 0px;
     position: relative;
     justify-content: center ;
     text-align: center;
+    padding: 10px;
+    margin: 10px;
 }
 
 .aptlogo{
@@ -33,10 +45,6 @@
   min-width: 45px;
 }
 
-.dialogposition{
-  justify-content: center;
-  text-align: center;
-}
 
 .textnormal{
   color: var(--main-text-color) ;
@@ -56,14 +64,26 @@
   align-items: center;
 }
 
+.texthighlightedXX{
+
+    background-color: var(--main-bb-color);
+    font-size: xx-large;
+    font-weight: bolder;
+    color: var(--main-bg-color) important !;
+    border-radius: 5px;
+    text-align: center;
+
+    
+    
+  }
 
 .texthighlighted{
 
   background-color: var(--main-bb-color);
-  font-size: larger;
+  font-size: x-large;
   font-weight: bolder;
   color: var(--main-bg-color) important!;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
 }
 
@@ -75,4 +95,55 @@
   
   
   cursor: pointer;
+}
+
+.fadeInSell {
+  -webkit-animation: fadeInRed 2s forwards;
+  animation: fadeInRed 2s forwards;
+}
+
+@keyframes fadeInRed {
+  0% {
+    background-color: red;
+  }
+
+  100% {
+    background-color: black;
+  }
+}
+
+@-webkit-keyframes fadeInRed {
+  0% {
+    background-color: red;
+  }
+
+  100% {
+    background-color: black;
+  }
+}
+
+
+.fadeInBuy {
+  -webkit-animation: fadeInGreen 2s forwards;
+  animation: fadeInGreen 2s forwards;
+}
+
+@keyframes fadeInGreen {
+  0% {
+    background-color: green;
+  }
+
+  100% {
+    background-color: black;
+  }
+}
+
+@-webkit-keyframes fadeInGreen {
+  0% {
+    background-color: green;
+  }
+
+  100% {
+    background-color: black;
+  }
 }

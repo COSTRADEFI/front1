@@ -3,6 +3,7 @@ import { useEffect, useRef,useState,useMemo } from 'react';
 import styles from './InfoBar.module.css';
 import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { AptosConfig, Aptos } from '@aptos-labs/ts-sdk';
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
@@ -11,10 +12,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import { ViewRequest,AptosAccount, Provider, Network} from "aptos";
-import { getAptosClient,DXBX} from '../../aptosClient.ts';
+import { getAptosClient,DXBX,getNetwork} from '../../aptosClient.ts';
 import {  updateBalanceVal,updateViewFct2,setDialogWelcomeVisible} from "../../store.ts";
 import useWindowDimensions from '../../useWindowDimensions';
-
+import { Slice } from 'lucide-react';
 
 interface InfoBarProps { }
 
@@ -23,6 +24,9 @@ const WConnector = () => {
   const {height, width} = useWindowDimensions();
   const dispatch = useDispatch();
   const dialogWelcomeVisible = useSelector((state: any) => state.clientReduxStore.dialogWelcomeVisible);
+  //const updateBalanceVal = useSelector((state: any) => state.clientReduxStore.balance);
+  //const userBalance = useSelector((state: any) => state.clientReduxStore.balance) * 0.00000001;
+  
   const {
     connected,
   } = useWallet();
@@ -79,6 +83,8 @@ const ConnectedFunctionalities = (props) => {
       signAndSubmitTransaction,
     } = useWallet();
    
+  let myclient = getAptosClient();
+  
     useEffect(() => {
       const interval = setInterval(() => { view_fct_2(); }, 1000);
       const interval2 = setInterval(() => { fetchWalletBalance(); }, 5000);
@@ -87,7 +93,19 @@ const ConnectedFunctionalities = (props) => {
         clearInterval(interval2);
 
       };
-    }, []);
+      // const fetchAll = async () => {
+      //   await view_fct_2();
+      //   await fetchWalletBalance();
+        
+        
+      //   setTimeout(() => {
+      //   fetchAll();  
+      //   }, 10000);
+      // };
+
+      // fetchAll();
+
+    }, [ connected]);
     
 
     if (connected) {
@@ -96,6 +114,8 @@ const ConnectedFunctionalities = (props) => {
       }
      
     }
+  
+  const {tradingBalance,setTradingBalance} = useState(0);
 
 
     const showMePlease = ( ) => async () => 
@@ -104,8 +124,9 @@ const ConnectedFunctionalities = (props) => {
       
     }
 
-    const userBalance = useSelector((state: any) => state.clientReduxStore.balance);
-
+    const userBalance = useSelector((state: any) => state.clientReduxStore.balance)*1.0;
+  const userMarginBalance = useSelector((state: any) => state.clientReduxStore.margin)*1.0;
+  
     const submitTransactionD = ()=> async () => {
       if (!account || !network) return;
     
@@ -147,9 +168,9 @@ const ConnectedFunctionalities = (props) => {
 
     const submitdxbx = (functionName: string, myparam:number =0,myleverage:number=50 ) => async () => {
       if (!account || !network) return;
-      if (network?.name !== 'devnet') {
+      if (network?.name !== getNetwork()) {
         disconnectWallet();
-        alert("Please connect to devNET");
+        alert("Please connect to",getNetwork());
       }
         let payload={};
         console.log('submittoModule', functionName);
@@ -231,14 +252,10 @@ const ConnectedFunctionalities = (props) => {
               };
             };
               break;
-                
-                
               default: {}
           };
           console.log('payload', payload);    
           try {
-            
-            
             const response = await signAndSubmitTransaction(payload);
             console.log("Transaction Submitted", response);
            // await aptosClient.waitForTransaction({ transactionHash: response.hash });
@@ -259,15 +276,65 @@ const ConnectedFunctionalities = (props) => {
       window.location.reload(false);
     }
   }
+ 
+  const lgetFABalance = async () => {
+
+
+
+
+// let myquery="query GetFungibleAssetBalances($address: String, $offset: Int) {  current_fungible_asset_balances( \
+//     where: {owner_address: {_eq: \"0xc4d40ddeab3a45bdd2621d980da2b56f9ac41ddf6f68058e2b800641e945c637\"}, asset_type: {_eq: \"0x000000000000000000000000000000000000000000000000000000000000000a\"}} \
+//     offset: 0 \
+//     limit: 100 \
+//     order_by: {amount: desc, asset_type_v1: asc, asset_type_v2: asc, amount_v2: asc, amount_v1: asc} \
+//   ) { \
+//     asset_type \
+//     amount \
+//     __typename \
+//   } 
+// ";
+
   
+//     const objects = await myclient.queryIndexer({
+//       query: {
+//         query: myquery
+// }
+//     });
+//     console.log('lgetFABalance', objects);
+    
+    // let tempArray: [] = [];
+    //  objects.s.forEach(element => {
+    //    tempArray.push(element.data);
+    //  });
+   //return objects;
+   console.log(account.address);
+const tokens = await myclient.getAccountOwnedTokens({ accountAddress: account.address });
+
+// const query: string = `query getAccountTokensCount($owner_address: String) {
+//   current_token_ownerships_aggregate(where: { owner_address: { _eq: $owner_address }, amount: { _gt: "0" } }) {
+//     aggregate {
+//       count
+//     }
+//   }
+// }`;
+// const variables = { owner_address: "0xc4d40ddeab3a45bdd2621d980da2b56f9ac41ddf6f68058e2b800641e945c637" };
+// const graphqlQuery = { query, variables };
+// const accountTokensCount = await myclient.queryIndexer(graphqlQuery);
+return tokens;
+
+  }
 
   const fetchWalletBalance = async () => {
+    const data = await lgetFABalance();
+    console.log('fetchWalletBalance FA',data);
+    
+
+
     if(!account){
         throw new Error("Account not connected");
     }
-
-    const mytURL= 'https://api.devnet.aptoslabs.com/v1/accounts/'+account.address+'/resource/0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';   
-   // console.log('init',mytURL);
+    const mytURL= 'https://api.'+getNetwork()+'.aptoslabs.com/v1/accounts/'+account.address+'/resource/0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';   
+    console.log('init',mytURL);
    try {
     const response = await fetch(mytURL);
     
@@ -275,19 +342,19 @@ const ConnectedFunctionalities = (props) => {
     let tbody = JSON.parse(body);
     
     let mynumber = tbody?.data.coin.value ;
-    console.log('mynumber',mynumber);
-    setMyWalletBalance(mynumber);
+   console.log('mynumber',mynumber);
+    setMyWalletBalance(mynumber/100000000);
    } catch (error) {
     console.error('error',error);
    }
   }
 
-
   const view_fct_2 = async () => {
     if(!account){
         throw new Error("Account not connected");
     }
-    const prov = new Provider(Network.DEVNET);
+    const prov =  new Provider(getNetwork());
+
     const payload: ViewRequest = {
     function: `${DXBX}::just::view_balance`,
     type_arguments: [],
@@ -295,16 +362,16 @@ const ConnectedFunctionalities = (props) => {
     };
     try {
       const viewresponse = await prov.view(payload);
-      //console.log('viewresponse',viewresponse);
+     // console.log('viewresponse',viewresponse[0].instrumentBalanceSmart);
       dispatch(updateBalanceVal(viewresponse[0].instrumentBalanceSmart));
       dispatch(updateViewFct2(viewresponse[0]));
       setOpenButtonVisible(false);
-      
+     // setTradingBalance(viewresponse[0].instrumentBalanceSmart));
+      console.log('viewresponse2',tradingBalance);
     } catch (error) {
       setOpenButtonVisible(true);
     } 
   }
-
 
   function formatAddress(account: AptosAccount) {
     return account.address.toString().slice(0, 6) + "..." + account.address.toString().slice(-6);
@@ -324,6 +391,11 @@ const ConnectedFunctionalities = (props) => {
     setAnchorEl(null);
   };
 
+
+  const getTotalBalance = () => {
+    return userBalance + userMarginBalance;
+  };
+
   const depositBlinking = () => {
     if (userBalance > 10000000) { 
       return 'wallet-button btn btn-primary';
@@ -332,7 +404,6 @@ const ConnectedFunctionalities = (props) => {
       return 'wallet-button btn btn-primary borderBlink';
     }
   }
-
 
   const useraccountbalanceBlinkingforFaucet = () => {
 
@@ -348,6 +419,9 @@ const ConnectedFunctionalities = (props) => {
   return (
 
     <div >
+      <div className='txtBalance'>
+        wallet balance {myWalletBalance.toFixed(2)} APT- trading balance  {(getTotalBalance()/100000000).toFixed(4)}
+      </div>
       <button
         className='wallet-button btn btn-primary'
         aria-controls={open ? 'basic-menu' : undefined}
@@ -447,51 +521,38 @@ const InfoBar: FC<InfoBarProps> = () => {
   let myStyleName='walletConnector';
   let myFullNameStyle='fullname';
   let myLogoStyle='clogo';
-  let mymainStyle='infobar';
+  let mymainStyle = 'infobar';
+  let isSmall=false;
 
   if (width<767) {
     myStyleName='walletConnectorSmall';
     myFullNameStyle='fullnamesmall';
     myLogoStyle='clogosmall';
     mymainStyle='infobarsmall';
-    
+    isSmall=true;
   }
-
-
-  
-  
-  
   return (
     <div className={mymainStyle}>
       
-        <Box sx={{ flexGrow: 1 }}>
-      <Grid className='alllogo'container  spacing={2} columns={50}>
+      {!isSmall &&
       
-
-        <Grid className={myLogoStyle} xs={1}>
-          <div>
-           C 
-          </div>
-        </Grid>
-        <Grid className={myFullNameStyle} xs={8}>
-          <div>COS.TRADE</div><div className='infotext'>beta</div>
-          
-        </Grid>
-
-        
-        
-        </Grid>
-       
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid className='alllogo' container spacing={2} columns={50}>
+            <Grid className={myLogoStyle} xs={1}>
+              <div>
+                C
+              </div>
+            </Grid>
+            <Grid className={myFullNameStyle} xs={8}>
+              <div>COS.TRADE</div><div className='infotext'>beta</div>
+            </Grid>
+          </Grid>
         </Box>
+      }
         <div className={myStyleName}  >
           <WConnector>
           </WConnector>
-       
         </div>
-
-
-
-
       </div>
   )
   

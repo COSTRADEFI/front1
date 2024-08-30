@@ -119,8 +119,6 @@ return (
     </div>
 
     
-    
-
     <div className={styles.group_bsdlg_l4}>
       <div className={styles.multexplain1}> Leverage  </div>
     
