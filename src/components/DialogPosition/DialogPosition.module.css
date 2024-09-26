@@ -5,35 +5,41 @@
     text-align: center;
     background-color: #1E2024;
     justify-content: center;
-    text-align: center;
+  
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;  
-  padding: 0px;
+  padding-bottom: 10px;
+  text-align: center;
 
 }
 
 .dialogpositionsmall {
   position: relative;
   width: 100%;
-  align-items: center;
-  text-align: center;
+  align-items: center!important;
+  
   background-color: #1E2024;
   justify-content: center ;
-  text-align: center;
+  
     border: 1px solid var(--main-bb-color);
     border-radius: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+        
+   
   }
 
   .container {
     width: 100%; /* Can be in percentage also. */
     height: auto;
     margin: 0 ;
-    padding: 0px;
+    
     position: relative;
     justify-content: center ;
     text-align: center;
-    padding: 10px;
-    margin: 10px;
+    
+    
 }
 
 .aptlogo{
@@ -66,25 +72,40 @@
 
 .texthighlightedXX{
 
-    background-color: var(--main-bb-color);
+    
     font-size: xx-large;
     font-weight: bolder;
-    color: var(--main-bg-color) important !;
-    border-radius: 5px;
-    text-align: center;
+    
+    color: var(--main-bb-color) !important;
 
-    
-    
+    border-radius: 10px;
+
+   
+    border-color:  var(--main-bb-color);
+    border: 1px solid var(--main-bb-color);
+    padding: 0px !important;
+    box-shadow: inset 0 0 0 1px var(--main-bb-color),
+        0px 0px 12px 0px var(--main-bb-color) inset,
+        0px 0px 20px 0px var(--main-bb-color);
+   align-content: center; 
   }
 
+
+
+
+
+  
 .texthighlighted{
 
-  background-color: var(--main-bb-color);
+
   font-size: x-large;
   font-weight: bolder;
-  color: var(--main-bg-color) important!;
+  color: white;
   border-radius: 5px;
   text-align: center;
+  align-items: center !important;
+  padding: 0px !important;
+  margin: 0px !important;
 }
 
 .btnClose{
@@ -146,4 +167,15 @@
   100% {
     background-color: black;
   }
+}
+
+
+.muigrid2-root{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
 }

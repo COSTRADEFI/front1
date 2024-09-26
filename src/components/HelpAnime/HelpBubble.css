@@ -1,0 +1,38 @@
+.HelpBubble-container {
+    background-color: rgb(35, 67, 156);
+    color: white;
+    font-size: x-large;
+    
+    border-width: 1px;
+    border-style: solid;
+    border-color:white;
+    border-radius: 20px;
+    border-width: 2px;
+    padding: 12px;
+    font-family: "Arial", sans-serif;
+    font-size: 10pt;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    max-width: 300px;
+}
+
+.HelpBubble-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.HelpBubble-control {
+    text-decoration: underline;
+    cursor: pointer;
+    color: orange;
+}
+
+.HelpBubble-close {
+    color: orange;
+    cursor: pointer;
+    display: block;
+    text-align: right;
+    margin-top: 0;
+    margin-bottom: 20px;
+}

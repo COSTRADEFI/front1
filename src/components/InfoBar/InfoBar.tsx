@@ -15,18 +15,15 @@ import { ViewRequest,AptosAccount, Provider, Network} from "aptos";
 import { getAptosClient,DXBX,getNetwork} from '../../aptosClient.ts';
 import {  updateBalanceVal,updateViewFct2,setDialogWelcomeVisible} from "../../store.ts";
 import useWindowDimensions from '../../useWindowDimensions';
-import { Slice } from 'lucide-react';
 
 interface InfoBarProps { }
 
-//const DXBX = '0xd19c3bcd94cdb6576b4a0ed958ed94805b78e1d7f4bdab3e5033bd7fb09d9bbd';
+
 const WConnector = () => { 
   const {height, width} = useWindowDimensions();
   const dispatch = useDispatch();
   const dialogWelcomeVisible = useSelector((state: any) => state.clientReduxStore.dialogWelcomeVisible);
-  //const updateBalanceVal = useSelector((state: any) => state.clientReduxStore.balance);
-  //const userBalance = useSelector((state: any) => state.clientReduxStore.balance) * 0.00000001;
-  
+ 
   const {
     connected,
   } = useWallet();
@@ -48,6 +45,7 @@ const WConnector = () => {
     }
    
   }
+  
   const showMePlease = ( ) => async () => 
   {
     dispatch(setDialogWelcomeVisible(true));
@@ -59,11 +57,8 @@ const WConnector = () => {
         <div className={depositBlinking()}>
           {!connected && <WalletConnector/>}
           {!connected && <button className='wallet-button btn btn-primary' onClick={showMePlease()}>?</button> }
-          
         </div>
         {connected && <ConnectedFunctionalities/>}
-       
-    
       </div>
   )
 }
@@ -73,8 +68,10 @@ const ConnectedFunctionalities = (props) => {
     const aptosClient = getAptosClient();
     const [myWalletBalance, setMyWalletBalance] = useState(0);
     const dispatch = useDispatch();
-    const [openButtonVisible, setOpenButtonVisible] = useState(false);
-    let isOwner: bool =false
+  const [openButtonVisible, setOpenButtonVisible] = useState(false);
+  //const [isOwner, setIsOwner] = useState(false);
+  let isOwner:boolean = false;
+  
     const {
       account,
       connected,
@@ -93,24 +90,12 @@ const ConnectedFunctionalities = (props) => {
         clearInterval(interval2);
 
       };
-      // const fetchAll = async () => {
-      //   await view_fct_2();
-      //   await fetchWalletBalance();
-        
-        
-      //   setTimeout(() => {
-      //   fetchAll();  
-      //   }, 10000);
-      // };
-
-      // fetchAll();
-
     }, [ connected]);
     
 
     if (connected) {
-        if (account?.address === DXBX) {
-          isOwner=true;
+      if (account?.address === DXBX) {
+        isOwner = true;
       }
      
     }
@@ -165,7 +150,99 @@ const ConnectedFunctionalities = (props) => {
         
     }
 
+  
+  const lcreateNFT = async (  ) => {
+      if (!account) {
+        throw new Error('Please connect your wallet first');
+      }
+    
+    let collectionName: string = "Accounts";
+    let uri: string = "https://f5c4dfa0fe2c14e113d9881788a255fa.blok.host/logo192.png";
+    let description: string = "costrade account";
+    let name: string = "costrade"+account.address;
+    let royalty: number = 0;
 
+   
+        const response = await signAndSubmitTransaction({
+          sender: account.address,
+          data: {
+            function:`${DXBX}::factory::mint_token`,
+            typeArguments: [],
+            functionArguments:  [collectionName,description,name,royalty, uri],
+          }
+        });
+        let myresult = await myclient.waitForTransaction({ transactionHash: response.hash });
+       return response.hash;
+  }
+  
+  
+  const callcreateNFT = ( ) => async () => {
+      
+     try {
+          let result = await lcreateNFT();
+          console.log('lcreateNFT',result);
+        }catch(error:any){
+          console.error(error);
+        }
+        
+    }
+  
+  
+  
+  
+  const callCollection = ( ) => async () => {
+      
+     try {
+          let result = await lcreateCollection();
+          console.log('callCollection',result);
+        }catch(error:any){
+          console.error(error);
+        }
+        
+    }
+  
+  
+  //function handleCreateCollection() {
+const handleCreateCollection = async ()=>{
+    try {
+      // Call the createCollection function from aptos.ts
+     //   console.log('handleCreateCollection',newCollectionName, newCollectionUri, newCollectionDesc);
+       let result = await lcreateCollection();
+        console.log('handleCreateCollection****************************************************************',result);
+      // Update the collections state or refetch collections
+     
+     } catch (error) {
+       console.error('Error creating collection:', error);
+       // Handle errors here
+     }
+  };
+  
+const lcreateCollection = async () => {
+    //notifToast("Creating Collection, Great");
+      if (!account) {
+        throw new Error('Please connect your wallet first');
+      }
+  try {
+    let collectionName: string = "Accounts2";
+    let uri: string = "https://f5c4dfa0fe2c14e113d9881788a255fa.blok.host/logo192.png";
+    let description: string = "costrade accounts";
+
+        const response = await signAndSubmitTransaction({
+          sender: account.address,
+          data: {
+            function:`${DXBX}::factory::create_collection`,
+            typeArguments: [],
+            functionArguments:  [collectionName, uri, description],
+          }
+        });
+        let myresult = await myclient.waitForTransaction({ transactionHash: response.hash });
+       return response.hash;
+      } catch (error: any) {
+         
+        //return null;
+      }
+    }
+  
     const submitdxbx = (functionName: string, myparam:number =0,myleverage:number=50 ) => async () => {
       if (!account || !network) return;
       if (network?.name !== getNetwork()) {
@@ -174,19 +251,19 @@ const ConnectedFunctionalities = (props) => {
       }
         let payload={};
         console.log('submittoModule', functionName);
-        console.log('Account submitdxbx', account);
+        console.log('Account submit', account);
         switch (functionName) {
           case 'open_customer_account_entry': {
             payload = {
-              sender: account.address,
-              data:{
-              type: "entry_function_payload",
-              function: DXBX + "::just::hope_it",
-              typeArguments: [],
-              functionArguments: [],
-              }
+            sender: account.address,
+            data:{
+            type: "entry_function_payload",
+            function: DXBX + "::just::hope_it",
+            typeArguments: [],
+            functionArguments: [],
+            }
             };
-          };
+            };
             break;
           case 'deposit_to_market_account_entry': {
             payload = {
@@ -277,11 +354,26 @@ const ConnectedFunctionalities = (props) => {
     }
   }
  
+
+
+ type AccountAPTBalanceArguments = {
+  accountAddress: string;
+};
+
+ const accountAPTBalance = async (args: AccountAPTBalanceArguments): Promise<number> => {
+  const { accountAddress } = args;
+  const balance = await myclient().view<[number]>({
+    payload: {
+      function: "0x1::coin::balance",
+      typeArguments: ["0x1::aptos_coin::AptosCoin"],
+      functionArguments: [accountAddress],
+    },
+  });
+  return balance[0];
+};
+
+
   const lgetFABalance = async () => {
-
-
-
-
 // let myquery="query GetFungibleAssetBalances($address: String, $offset: Int) {  current_fungible_asset_balances( \
 //     where: {owner_address: {_eq: \"0xc4d40ddeab3a45bdd2621d980da2b56f9ac41ddf6f68058e2b800641e945c637\"}, asset_type: {_eq: \"0x000000000000000000000000000000000000000000000000000000000000000a\"}} \
 //     offset: 0 \
@@ -307,8 +399,10 @@ const ConnectedFunctionalities = (props) => {
     //    tempArray.push(element.data);
     //  });
    //return objects;
-   console.log(account.address);
-const tokens = await myclient.getAccountOwnedTokens({ accountAddress: account.address });
+   //console.log(account.address);
+    const tokens = await myclient.getAccountOwnedTokens({ accountAddress: account?.address });
+   //console.log('tokens',tokens); 
+
 
 // const query: string = `query getAccountTokensCount($owner_address: String) {
 //   current_token_ownerships_aggregate(where: { owner_address: { _eq: $owner_address }, amount: { _gt: "0" } }) {
@@ -326,7 +420,7 @@ return tokens;
 
   const fetchWalletBalance = async () => {
     const data = await lgetFABalance();
-    console.log('fetchWalletBalance FA',data);
+  //  console.log('fetchWalletBalance FA',data);
     
 
 
@@ -334,7 +428,7 @@ return tokens;
         throw new Error("Account not connected");
     }
     const mytURL= 'https://api.'+getNetwork()+'.aptoslabs.com/v1/accounts/'+account.address+'/resource/0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>';   
-    console.log('init',mytURL);
+   // console.log('init',mytURL);
    try {
     const response = await fetch(mytURL);
     
@@ -342,7 +436,7 @@ return tokens;
     let tbody = JSON.parse(body);
     
     let mynumber = tbody?.data.coin.value ;
-   console.log('mynumber',mynumber);
+   //console.log('mynumber',mynumber);
     setMyWalletBalance(mynumber/100000000);
    } catch (error) {
     console.error('error',error);
@@ -367,7 +461,7 @@ return tokens;
       dispatch(updateViewFct2(viewresponse[0]));
       setOpenButtonVisible(false);
      // setTradingBalance(viewresponse[0].instrumentBalanceSmart));
-      console.log('viewresponse2',tradingBalance);
+    //  console.log('viewresponse2',tradingBalance);
     } catch (error) {
       setOpenButtonVisible(true);
     } 
@@ -423,7 +517,7 @@ return tokens;
         wallet balance {myWalletBalance.toFixed(2)} APT- trading balance  {(getTotalBalance()/100000000).toFixed(4)}
       </div>
       <button
-        className='wallet-button btn btn-primary'
+        className='wallet-button btn btn-primary iamconnected'
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -443,7 +537,7 @@ return tokens;
       
   { openButtonVisible &&  <Tooltip className="tooltipmain"  title="CREATE DEPOSIT ACCOUNT"  placement="top-start"> 
   <button
-        className='wallet-button btn btn-primary borderBlink'
+        className='wallet-button btn btn-primary borderBlink ineedtoopenaccount'
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -451,20 +545,12 @@ return tokens;
       >
         {"Open Account"}
       </button>
-      <button
-        className= {useraccountbalanceBlinkingforFaucet()}
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={callFaucet()}
-      >
-        {"Faucet 1"}
-      </button>
+      
 
       </Tooltip>}
       
       {!openButtonVisible && <button
-        className={depositBlinking()}
+        className={depositBlinking()+" ineedtodepositone"}
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -476,25 +562,26 @@ return tokens;
       </button>}
 
       {!openButtonVisible && <button
-        className=' wallet-button btn btn-primary'
+        className=' wallet-button btn btn-primary ineedtowithdrawone'
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={submitdxbx('withdraw_from_market_account', 1)}
       >
         {"Withdraw 1"}
+
       </button>}
-      {!openButtonVisible && <button
-        className={useraccountbalanceBlinkingforFaucet()}
+      {connected && <button className='wallet-button btn btn-primary' onClick={showMePlease()}>?</button>}
+      <button
+        className={useraccountbalanceBlinkingforFaucet() + " faucetbtn ineedgetfromfaucet"}
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={callFaucet()}
       >
         {"Faucet 1"}
-      </button>}
-      {connected && <button className='wallet-button btn btn-primary' onClick={showMePlease()}>?</button> }
-     
+      </button>
+      
     </div>
 
   )

@@ -83,6 +83,7 @@ scheme3:
 
 --main-bb-color: #ffa028;
 --main-bb-color-light:#feba11;
+--main-background-color: #111414;
   --main-text-color:  #D9D9D999;
   --main-text-highlight-color: #ffffff;
   --negative-box-shadow: rgba(238, 101, 101, 0.7);
@@ -91,7 +92,7 @@ scheme3:
 }
 
 body {
-  background-color: #111414;
+  background-color: var(--main-background-color);
   margin: 10;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -100,7 +101,7 @@ body {
 
 
 .chartcompo{ 
-  background-color:#111414;
+  background-color:var(--main-background-color);
   z-index: 0  ;
   padding:10px;
   margin:10px;
@@ -301,8 +302,17 @@ body {
   background-color: var(--main-bb-color-light) !important;
 }
 
-.MuiMenu-root ul {
+.MuiTypography-root {
   color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px !important;
+  padding: 0px;
+  margin: 0px;
+}
+
+.MuiMenu-root ul {
+  color: #000000 !important;
   font-size: 20px;
   font-weight: bold;
   border-radius: 10px !important;
@@ -356,27 +366,142 @@ body {
 }
 
 .myeventsctn {
-  position: relative;
-  
-  
+  position: absolute;
   border: 1px solid var(--main-bb-color); 
   border-radius: 10px;
-width: 100%-20px;
-  padding: 10px;
+  width: 360px;
+  height: 200px;
   margin: 10px;
+  padding: 10px;
 }
-  
-
+ 
 
 .TradeEventsWrapper{
-  
-    
-    
+ 
     font-size: larger;
     align-items: right;
-  
-color: var(--main-text-highlight-color);
-    
-width: 100%;
-  
+    color: var(--main-text-highlight-color);
+    width: 100%;
 } 
+
+
+.mytrolleventsctn {
+  
+  position: absolute;
+  border: 1px solid var(--main-bb-color);
+  border-radius: 10px;
+  left: 390px;
+  height: 200px;
+  width: 330px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.mytestsGamify{
+  position: absolute;
+  border: 1px solid var(--main-bb-color);
+  border-radius: 10px;
+  left: 750px;
+  height: 200px;
+  width: 330px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.mainfooter {
+  position: absolute;
+  bottom: 00;
+  right: 0;
+  width: 100%;
+  color: var(--main-text-color);
+  background-color:var(--main-background-color);;
+  height: 30px;
+  text-align: right;
+  padding: 10px;
+  z-index: 2220;
+ 
+  
+}
+
+
+.quicklinks {
+  
+  
+  
+  
+}
+
+.buttonfooter {
+  background-color: var(--main-bb-color);
+    
+    height: 30px;
+    color:black;
+    font-size: small;
+    
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 77px;
+ 
+     
+    cursor: pointer;
+    border-radius: 10px;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
+    margin-left: 10px;
+
+}
+.copyrightText{
+  
+ 
+  
+}
+
+.grid-container {
+  display: inline-grid;
+}
+
+.itemText {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  text-align: center !important;
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px;
+    justify-content: center;
+  
+}
+
+.itemBtns {
+  grid-column-start: 2;
+  grid-column-end: 7;
+}
+
+.iamconnected{
+
+}
+
+
+.absolutebuttonfooter {
+  position: absolute;
+  background-color: var(--main-bb-color);
+
+  height: 30px;
+  color: black;
+  font-size: small;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 77px;
+
+
+  cursor: pointer;
+  border-radius: 10px;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  margin-left: 10px;
+z-index: 2220;
+}

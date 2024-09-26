@@ -7,9 +7,9 @@
     height: auto;
     
 
-    color: aqua;
+    color: white;
     z-index: 1500;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, .851);
     border-radius: 10px;
     border-color: white;
     border-width: 2px;
@@ -27,7 +27,7 @@
     height: auto;
     
 
-    color: aqua;
+    color: white;
     z-index: 1500;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
@@ -56,6 +56,7 @@
     border-style: solid;
     justify-content: center;
   align-items: center;
+  width: 150px;
     
 }
 

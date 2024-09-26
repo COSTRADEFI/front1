@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { Container } from 'react-bootstrap';
 import useWindowDimensions from '../../useWindowDimensions';
+import Tooltip from '@mui/material/Tooltip';
 
 interface ChartTitleProps {}
 
@@ -46,20 +47,22 @@ const ChartTitle: FC<ChartTitleProps> = (props) => {
       
         <Grid xs={3}>
           <div ><div className={indexvalueTh} xs={1}>
-         {lastIndex.toFixed(4) }
+         {lastIndex.toFixed(2) }
         </div>
 
         <div className='indexchange'>
-         {myChange.toFixed(4)+'%'}
+         {myChange.toFixed(2)+'%'}
         </div></div>
-        </Grid>
+          </Grid>
+          <Tooltip title="The index value is randomly generated and changes every 1 seconds" followCursor>
         <Grid xs={15}>
                  <div className={mystyle}>
                  <img  className="aptlogo" src="Aptos_mark_WHT.svg"/>              
-            APTOS random Index
+            APTOS randomly generated Index
           </div>
 
-        </Grid>
+            </Grid>
+            </Tooltip>
         
         
        

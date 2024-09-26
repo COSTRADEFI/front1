@@ -178,9 +178,9 @@ const dialogpositionlargeFade = () => {
           <Grid className='textnormaldata' xs={3}>
             <a>{userMarginBalance.toFixed(4)}</a>
              </Grid>
-             <Grid xs={3}>
+             <Grid xs={3} className="texthighlightedXX">
                
-                <CountUp className="texthighlightedXX"
+                <CountUp 
               start={0}
               end={userBalance+userMarginBalance}
               redraw={false}
@@ -230,9 +230,9 @@ const dialogpositionlargeFade = () => {
     {connected && (<>
           
         
-             <Grid xs={4}>
+             <Grid xs={4} className="texthighlightedXX" style={{ marginLeft: '15px' } } >
                
-                <CountUp className="texthighlightedXX"
+                <CountUp 
               start={0}
               end={userBalance+userMarginBalance}
               redraw={false}
@@ -242,11 +242,12 @@ const dialogpositionlargeFade = () => {
               decimal="."
               prefix=""
               suffix=""
-            ></CountUp>
+                 ></CountUp>
+               
           </Grid>
           
-          <Grid  xs={2}>
-            <div className='texthighlighted'>{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
+          <Grid  xs={2} >
+            <div className='texthighlighted' >{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
           </Grid>
           <Grid  xs={2}>
             <div className='texthighlighted'>{sideLS}{' '}{userContractBalance}      </div>   

@@ -6,15 +6,14 @@ import { getAptosClient} from '../../aptosClient.ts';
 
 export const TradeEvents = (props) => {
   const { account } = useWallet();
-  
-  let myclient = getAptosClient();
-
   const [tradeEvents, settradeEvents] = useState([]);
+
+  let myclient = getAptosClient();
   
   useEffect(() => {
     const fetchNFTs = async () => {
-      if (account?.address)
-      {
+    
+      
         try {
           const data = await lgettradeEvents();
           settradeEvents(data);
@@ -26,7 +25,7 @@ export const TradeEvents = (props) => {
         } finally {
           //setLoading(false);
         }
-      }
+      
       
     };
 
@@ -35,28 +34,25 @@ export const TradeEvents = (props) => {
       fetchNFTs();
     }, 1000);
       return () => {
-        
         clearInterval(interval2);
-
       };
+  },[] );
 
-    
-    
-  }, );
-
-  
   const lgettradeEvents = async () => {
+   // console.log("lgettradeEvents");
     const objects = await myclient.queryIndexer({
       query: {
         query: `query MyQuery {
   events(
-    where: { indexed_type: {_eq: "0xd19c3bcd94cdb6576b4a0ed958ed94805b78e1d7f4bdab3e5033bd7fb09d9bbd::just::TradeEvent"}}
-    order_by: {transaction_version: desc}
-    limit: 7
+    limit: 8
+    order_by: {transaction_block_height: desc}
+    where: {indexed_type: {_eq: "0x13a9f1a109368730f2e355d831ba8fbf5942fb82321863d55de54cb4ebe5d18f::just::TradeEvent"}}
   ) {
     data
+    transaction_block_height
   }
-}`
+}
+`
 },
     });
     let tempArray: TradeEvent[] = [];

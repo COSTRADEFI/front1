@@ -66,10 +66,7 @@ export const BuySellDialog = (props) => {
 const submitTrade = async () => {
   if (!account || !network) return;
 
-  // if (network !== Network.TESTNET) {
-  //   //disconnectWallet();
-  //   alert("Please connect to TESTNET");
-  // }
+
 
   try {
     let howmany = (userBalance*sliderValue/100000000).toFixed(0);// stakeValueRef.current.value;

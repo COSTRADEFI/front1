@@ -6,7 +6,7 @@ import {
   } from "../../store.ts";
   import useWindowDimensions from '../../useWindowDimensions';
 
-
+import { getNetwork } from "../../aptosClient.ts";
 interface Props {
 }
 
@@ -31,17 +31,18 @@ export const WelcomeDialog: FC<Props> = () => {
         mystyle =  'maincontsmall';   
     }
 
+    let myNetwork = getNetwork();
     return (
         <div  className={mystyle}>
             <div className={styles.welcomeDialogContainer}>
                 <div className={styles.welcomeDialogTitle}>
-                    <h1>Welcome to Random Index Trading</h1>
+                    <h1>TRUE Random Index Trading</h1>
                 </div>
                 <div className={styles.welcomeDialogBody}>
-                    <p>1-Connect your wallet using TESTNET</p>
+                    <p>1-Connect your wallet using {myNetwork }</p>
                     <p>2-Get some coins from Faucet (if needed)</p>
                     <p>3-Create a Deposit account</p>
-                    <p>4-Deposit 1 APT (TESTNET)</p>
+                    <p>4-Deposit 1 APT ({myNetwork })</p>
                     <p>5-BUY or SELL the index </p>
                     <p>6-Select your Leverage</p>
                     <p>7-Submit your Order</p>
@@ -52,9 +53,10 @@ export const WelcomeDialog: FC<Props> = () => {
                     <img className="xlogo" src="X_logo_2023_(white).png"/>@costrade_fi
                     </div>
                     </a>
-                    <a href="https://paragraph.xyz/@costradefi/trade-randomness">HowTo</a>
+                    
                 </div>
                 <div className='welcomeDialogFooter' >
+                    
                     <button className='getStartedButton' onClick={closeMePlease()}>Got it!</button>
                 </div>
             </div>

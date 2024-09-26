@@ -2,9 +2,10 @@ import { createChart, ColorType,LineStyle,CrosshairMode,CandlestickStyleOptions 
 import React, { useEffect, useRef,useState,useMemo } from 'react';
 import { ViewRequest, Provider, AptosClient ,Network} from "aptos";
 import { BuySellDialog } from './components/BuySellDialog/BuySellDialog.tsx';
-import { Button,Modal } from 'react-bootstrap';
+import { Button,Col,Modal, Row } from 'react-bootstrap';
+//import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
-
+import { Aptos, AptosConfig, queryIndexer, throwTypeMismatch } from "@aptos-labs/ts-sdk";
 import { DXBX } from './aptosClient.ts';
 import InfoBar from './components/InfoBar/InfoBar.tsx';
 import  DialogPosition  from './components/DialogPosition/DialogPosition.tsx';
@@ -12,7 +13,12 @@ import ChartTitle from './components/ChartTitle/ChartTitle.tsx';
 import { WelcomeDialog } from './components/WelcomeDialog/WelcomeDialog.tsx';
 import { TradeEvents } from './components/TradeEvents/TradeEvents.jsx';
 import { getAptosClient } from "./aptosClient.ts";
+import TrollCommunity from './components/TrollCommunity/TrollCommunity.tsx';
+import { TestMuiDialogBoxes } from './components/testMuiDialogBoxes/testMuiDialogBoxes.tsx';
+import Tooltip from '@mui/material/Tooltip';
+import { HelpSequence,MyHelpSequence } from './components/HelpAnime/HelpSequence.js';
 
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 import {
     newRandomVal,
@@ -24,26 +30,21 @@ import {
 } from "./store.ts";
 
 import './App.css';
-import { Bool } from '@aptos-labs/ts-sdk';
-
-//const DXBX = '0x7cfadf121d363b27b55636dbe10b172ec58a875baa48c0c08a7e5eaad4e4f981';
-//const DXBX = '0x64b5f94e764c3cc23a1f8c09be4e0b2c7d16d2f29e62ef744e8d533c664f0bd6';
 
 const UPCOLOR='#0089e9';
-const DOWNCOLOR='#8a282e';
+const DOWNCOLOR = '#8a282e';
+
 
 export const ChartComponent = props => {
     const lastrandVal = useSelector((state: any) => state.clientReduxStore.lastRandomVal);
     let mylastindex=0;
     const dispatch = useDispatch();
     const {
-      colors: {
-        backgroundColor = '#111414',
-            //lineColor = '#2962FF',
+        colors: {
+            backgroundColor = '#111414',
             textColor = '#A9A9A9',
             areaTopColor = 'red',
-                
-        } = {},
+            } = {},
         } = props;
 
     const chartContainerRef = useRef();
@@ -52,12 +53,19 @@ export const ChartComponent = props => {
     let oldtimestamp = 0;
     let lastCandle;
 
+  
+    let myclient = getAptosClient();
+  
+    const {loadingIndex,setLoadingIndex} = useState(false);
+    const [indexPrice,setIndexPrice] = useState(0); 
+
+
+
     useEffect(
         () => {
             
 
             const handleResize = () => {
-                //let myWidth = chartContainerRef.current.clientWidth * 5 / 5;
                 let myWidth = chartContainerRef.current.clientWidth;
                 let myHeight = chartContainerRef.current.clientHeight;
                 if (chartContainerRef.current.clientWidth > 767){
@@ -71,9 +79,6 @@ export const ChartComponent = props => {
                         myHeight = Math.max(350,myHeight/1)
                     }
                 }
-                // (chartContainerRef.current.clientWidth > 767) ? (myWidth = myWidth - 320) : (myWidth =  chartContainerRef.current.clientWidth);
-                // (chartContainerRef.current.clientWidth > 767) ? ( myHeight = 550 ) : ( myHeight = Math.max(150,myHeight/1));
-                
                 chart.applyOptions({ width: myWidth ,height : myHeight,    });
             };
 
@@ -81,17 +86,14 @@ export const ChartComponent = props => {
                 const u = 1 - Math.random(); // Converting [0,1) to (0,1]
                 const v = Math.random();
                 const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-                // Transform to the desired mean and standard deviation:
-              //  console.log("gaussian random",z);
-              //  console.log("gaussian random returns",z * stdev + mean);
                 return z * stdev + mean;
             }
 
             function calc(entrynumber:number){
-            var count  = 2;     // # of gaussian values to generate
-            var values = new Array(count);
+            let count  = 2;     // # of gaussian values to generate
+            let values = new Array(count);
             values[0]=entrynumber;
-            for(var i = 1; i < count; ++i) {
+            for(let i = 1; i < count; ++i) {
                 let myval=gaussianRandom(0,0.5)/400;
                 let mysign=0;
                 if (myval>0){
@@ -107,8 +109,8 @@ export const ChartComponent = props => {
             }
             
             function calc_init(entrynumber:number){
-                var count  = 2;     // # of gaussian values to generate
-                var values = new Array(count);
+                let count  = 2;     // # of gaussian values to generate
+                let values = new Array(count);
                 values[0]=entrynumber;
                 for(var i = 1; i < count; ++i) {
                     let myval=gaussianRandom(0,2)/100;
@@ -175,11 +177,12 @@ export const ChartComponent = props => {
                 let mynetwork=getAptosClient().config.network;
 
                 const mytURL= 'https://api.'+mynetwork+'.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';   
-           //     console.log('init',mytURL);
+             //   console.log('init',mytURL);
                 const response = await fetch(mytURL);
 
            
                 const body = await response.text();
+               // console.log('init_random',body);
                 let tbody = JSON.parse(body);
                 //let mynumber = tbody?.data.my_message * 0.00001;
                 let mynumber = tbody?.data.price * 0.00001;
@@ -200,40 +203,41 @@ export const ChartComponent = props => {
                     myDataCandleArray.push(candle);
                     mynumber=calc_init(mynumber);
                } 
-               candlestickSeries.setData( myDataCandleArray.reverse());
+                candlestickSeries.setData(myDataCandleArray.reverse());
+                fetchIndex();
+                
             }
 
-            
-            async function fetch_random() {
-                function updateCandle(newnumber) { 
-                    //if (newnumber !== oldnumber) 
-                    {
+            function updateCandle(newnumber) { 
                     oldnumber = newnumber;
                     let res = generateOneData(newnumber);
                     candlestickSeries.update(res);
-                }
+            }
+            
+            async function fetch_random() {
+                // function updateCandle(newnumber) { 
+                //     oldnumber = newnumber;
+                //     let res = generateOneData(newnumber);
+                //     candlestickSeries.update(res);
+                // }
 
-                }
+                
 
                 let mynetwork=getAptosClient().config.network;
                 const mytURL= 'https://api.'+mynetwork+'.aptoslabs.com/v1/accounts/'+DXBX+'/resource/'+DXBX+'::just::RandomIndex';
                 const response = await fetch(mytURL);
                 const body = await response.text();
                 let tbody = JSON.parse(body);
-
+console.log('fetch_random',tbody);
                 //let mynumber = tbody?.data.my_message * 0.00001;
-                let mynumber = tbody?.data.price * 0.00001;
+                let mynumber = tbody?.data?.price * 0.00001;
                   //console.log('fetch_random',mynumber,mylastindex);
                 
                 let tf=false;
                 if (mynumber !== mylastindex){
                     mylastindex=mynumber;
                     tf=true;
-                  //  console.log('fetch_random anime',mynumber,mylastindex);
                 }
-              
-                //  let tf=(mynumber!=lastrandVal)? true:false;
-
                 dispatch(newRandomVal( mynumber ));
                 updateCandle(mynumber);
 
@@ -249,33 +253,68 @@ export const ChartComponent = props => {
                         updateCandle(calc(mynumber));
                     }, Math.random()*1000);
                 }
-            } 
+                //await fetchIndex();
+            }
 
-            const view_random = async () => {
-                const prov = new Provider(getAptosClient().config.network);
-                const payload: ViewRequest = {
-                    function: `${DXBX}::prob_distribution::get_nd_random_number`,
-                    type_arguments: [],
-                    arguments: [],
-                };
-                const viewresponse = await prov.view(payload);
-                let mynumber = 0;
-                let mysign = 1;
-                if (viewresponse[0].positive) {
-                    mynumber = viewresponse[0].value;
-                } else {
-                    mynumber = -viewresponse[0].value;
-                    mysign = -1;
+            const fetchIndex = async () => {
+  
+                try {
+  
+            const datafetched = await lgetrandomIndex();
+            setIndexPrice(datafetched.events[0].data.price);
+            dispatch(newRandomVal( indexPrice ));
+            let mynumber = datafetched.events[0].data.price*0.00001;
+                let tf=false;
+                if (mynumber !== mylastindex){
+                    mylastindex=mynumber;
+                    tf=true;
                 }
-                if (mynumber !== oldnumber) {
-                    oldnumber = mynumber;
-                    let toprint = mynumber;
-                    mynumber = mynumber / 1 * 1e-21;
-                    mycalcindextemptes = mycalcindextemptes * ((1 + mysign * 1 / 200 * Math.sqrt(Math.exp(mynumber))));
-                    let res = generateOneData(mycalcindextemptes);
-                    candlestickSeries.update(res);
+                dispatch(newRandomVal( mynumber ));
+                updateCandle(mynumber);
+                if (tf)
+                {
+                    setTimeout(() => {
+                        updateCandle(calc(mynumber));
+                    }, Math.random()*1000);
+                    setTimeout(() => {
+                        updateCandle(calc(mynumber));
+                    }, Math.random()*1000);
+                    setTimeout(() => {
+                        updateCandle(calc(mynumber));
+                    }, Math.random()*1000);
                 }
-            } 
+                } catch (error) {
+                    //setLoadingIndex(false);
+            console.error('Error fetching index Values: ', error);
+           // Handle errors gracefully here
+                } finally {
+                    //setLoadingIndex(false);
+                    setTimeout(() => {
+                        fetchIndex();
+                    }, 900);
+            
+            
+        }
+    };
+           // fetchIndex();
+
+  const lgetrandomIndex = async ( ) => {
+  const objects = await myclient.queryIndexer({
+      query: {
+        query: `query MyQuery {
+  events(
+    where: {indexed_type: {_eq: "0x13a9f1a109368730f2e355d831ba8fbf5942fb82321863d55de54cb4ebe5d18f::just::RandomIndexEvent"}}
+    order_by: {transaction_block_height: desc}
+    limit: 1
+  ) {
+    data
+  }
+}
+`,
+},
+});
+return objects;
+};
 
             function generateOneData(newindexVal: number) { 
                 const createCandle = (val, time) => ({
@@ -422,16 +461,26 @@ export const ChartComponent = props => {
                 borderDownColor: myDownColor,
                 wickVisible: true,
             });
-            const data =[];
-            const intervalID = setInterval(() => {
+            const data = [];
+            
+           // const intervalID = setInterval(() => {
+            //const intervalID = setTimeout(() => {
+                
+            
                // view_random(); 
-                let r=  fetch_random();
+                //    let r=  fetch_random();
+                // if (loadingIndex === false) {
+                //     fetchIndex();
+                // }
               //   console.log('update v', 0);
-            }, 333);
+         //   }, 933);
             window.addEventListener('resize', handleResize);
+
             return () => {
                 window.removeEventListener('resize', handleResize);
                 chart.remove();
+                //  clearTimeout(intervalID);
+                //clearInterval(intervalID);
             };
         },    
     
@@ -457,17 +506,23 @@ export const ChoiceComponent = props => {
     </div>);
 };
 
+
+
+
+
 export function App(props) {
     const [isDesktop, setDesktop] = useState(false);
     const [showModalDlg, setshowModalDlg] = useState(false);
     let isb= (Math.random() < 0.5)?true:false;
     const [isDlgBuy, setDlgBuy] = useState(isb);
-    const [myWidth,setMyWidth]=useState(0);
-
-
+    const [myWidth, setMyWidth] = useState(0);
+    const [light, setLight] = useState(true);
+    const [showHelp, setShowHelp] = useState(false);
+    
     const dialogWelcomeVisible = useSelector((state: any) => state.clientReduxStore.dialogWelcomeVisible);
     //const dispatch = useDispatch();
 
+    const dispatch=useDispatch();
     
     //dispatch(setDialogWelcomeVisible(true));
     //const dialogWelcomeVisible = useSelector((state) => state.dialogWelcomeVisible);
@@ -491,17 +546,28 @@ export function App(props) {
     };
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
-  }, []);
+    }, []);
+    
+const showMePlease = ( ) => async () => 
+  {
+    dispatch(setDialogWelcomeVisible(true));
+    
+  }
+
+
     return (
+            
+      
     <div className='myApp' >
-        {<WelcomeDialog> </WelcomeDialog>}
+        {<WelcomeDialog props> </WelcomeDialog>}
         <div onClick={() => { setshowModalDlg(false) }}>
         {isDesktop && <InfoBar /> }
             <div className='chartcompo'>
             <ChartTitle mySwidth={myWidth}></ChartTitle>
                 <ChartComponent {...props} >
                 </ChartComponent>
-            </div>
+                </div>
+                
                             {isDesktop && <div className='BSDialog' >
                             <BuySellDialog  setDlgBuy={ setDlgBuy} isDlgBuy={isDlgBuy} /></div>}
             </div>
@@ -520,11 +586,44 @@ export function App(props) {
             )
             }
             
-            {isDesktop &&
+                {isDesktop &&
+                    <div>
+                    <div>
+                        
                 <div className='myeventsctn'>
                     <TradeEvents>
                     </TradeEvents>
-                </div>
+                    </div>
+                    <div className='mytrolleventsctn'>
+                    <TrollCommunity>
+                    </TrollCommunity>
+                            </div>
+                        
+                            
+                        
+                    </div>
+                        <div className='mainfooter' >
+                            <div class="grid-container">
+                                <div class="itemText">2024CodeCollision</div>
+                                <div class="itemBtns"><Button className='buttonfooter' onClick={showMePlease()}> info</Button>
+                                    <Button className='buttonfooter'onClick={()=>setShowHelp(true)}> quickStart </Button>
+                                    <HelpSequence
+        sequence={MyHelpSequence}
+        opentest={true}
+        open={showHelp}
+        onClose={() => setShowHelp(false)
+            
+        
+        }
+        
+      /></div>
+                                </div>
+
+                        </div>
+    </div>
+                    }
+                        
+                    
             }
             
             </div>
@@ -537,7 +636,7 @@ export function App(props) {
                 {     (!isDesktop) &&  (<div className='notifsmall'> <InfoBar /> </div>)}
             </div>
      </div>
-   
+       
     );
 }
 
