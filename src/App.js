@@ -16,7 +16,8 @@ import { getAptosClient } from "./aptosClient.ts";
 import TrollCommunity from './components/TrollCommunity/TrollCommunity.tsx';
 import { TestMuiDialogBoxes } from './components/testMuiDialogBoxes/testMuiDialogBoxes.tsx';
 import Tooltip from '@mui/material/Tooltip';
-import { HelpSequence,MyHelpSequence } from './components/HelpAnime/HelpSequence.js';
+import { HelpSequence, MyHelpSequence } from './components/HelpAnime/HelpSequence.js';
+import LeaderBoardOrLP from './components/LeaderBoardOrLP/LeaderBoardOrLP.tsx';
 
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
@@ -291,7 +292,7 @@ console.log('fetch_random',tbody);
                     //setLoadingIndex(false);
                     setTimeout(() => {
                         fetchIndex();
-                    }, 900);
+                    }, 333);
             
             
         }
@@ -562,6 +563,7 @@ const showMePlease = ( ) => async () =>
         {<WelcomeDialog props> </WelcomeDialog>}
         <div onClick={() => { setshowModalDlg(false) }}>
         {isDesktop && <InfoBar /> }
+        {isDesktop &&  <Button className='buttonfooter'onClick={()=>setShowHelp(true)}> quickStart </Button>}
             <div className='chartcompo'>
             <ChartTitle mySwidth={myWidth}></ChartTitle>
                 <ChartComponent {...props} >
@@ -569,7 +571,13 @@ const showMePlease = ( ) => async () =>
                 </div>
                 
                             {isDesktop && <div className='BSDialog' >
-                            <BuySellDialog  setDlgBuy={ setDlgBuy} isDlgBuy={isDlgBuy} /></div>}
+                    <BuySellDialog setDlgBuy={setDlgBuy} isDlgBuy={isDlgBuy} />
+                    <img  className="logoapp" src="logo192.png"/>
+                 
+                </div>                
+                }
+                
+                
             </div>
             <div >
             
@@ -582,6 +590,7 @@ const showMePlease = ( ) => async () =>
                 : (
                     <div className='mobileViewPosition' onClick={() => { setshowModalDlg(false) }} >
                         <DialogPosition/>
+                        <img  className="logoapp" src="logo192.png"/>
                     </div>
             )
             }
@@ -598,29 +607,20 @@ const showMePlease = ( ) => async () =>
                     <TrollCommunity>
                     </TrollCommunity>
                             </div>
-                        
-                            
-                        
+                            <div className='myleaderboardctn'>
+                                <LeaderBoardOrLP />
+                            </div>
                     </div>
-                        <div className='mainfooter' >
-                            <div class="grid-container">
-                                <div class="itemText">2024CodeCollision</div>
-                                <div class="itemBtns"><Button className='buttonfooter' onClick={showMePlease()}> info</Button>
-                                    <Button className='buttonfooter'onClick={()=>setShowHelp(true)}> quickStart </Button>
                                     <HelpSequence
         sequence={MyHelpSequence}
         opentest={true}
         open={showHelp}
         onClose={() => setShowHelp(false)
-            
-        
         }
         
+        
       /></div>
-                                </div>
-
-                        </div>
-    </div>
+                        
                     }
                         
                     
@@ -630,7 +630,7 @@ const showMePlease = ( ) => async () =>
             {showModalDlg && (<div className='clickablearea'> </div>)}
             {showModalDlg && (<div className='mobileBSDialog'> <BuySellDialog showModalDlg={showModalDlg} setshowModalDlg={setshowModalDlg} setDlgBuy={setDlgBuy} isDlgBuy={isDlgBuy} /></div>)}
             
-                {!showModalDlg && (!isDesktop) && (<div > <ChoiceComponent showModalDlg={showModalDlg} setshowModalDlg={setshowModalDlg} setDlgBuy={setDlgBuy} isDlgBuy={isDlgBuy} /></div>  )}
+            {!showModalDlg && (!isDesktop) && (<div > <ChoiceComponent showModalDlg={showModalDlg} setshowModalDlg={setshowModalDlg} setDlgBuy={setDlgBuy} isDlgBuy={isDlgBuy} /></div>  )}
             <div onClick={() => { setshowModalDlg(false) }}>
                 
                 {     (!isDesktop) &&  (<div className='notifsmall'> <InfoBar /> </div>)}

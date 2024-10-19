@@ -67,9 +67,8 @@ scheme3:
 
 :root {
   
-  --positive-buy-color: #5c9e29;
-  
-  --positive-buy-color-dark: #8de056af;
+  --positive-buy-color: #00d400;
+  --positive-buy-color-dark: #5c9e29;
   --positive-buy-color-darker: #8de05659;
   --positive-buy-color-muchdarker: #9fe56e1a ;
   
@@ -367,6 +366,8 @@ body {
 
 .myeventsctn {
   position: absolute;
+  
+  
   border: 1px solid var(--main-bb-color); 
   border-radius: 10px;
   width: 360px;
@@ -388,6 +389,7 @@ body {
 .mytrolleventsctn {
   
   position: absolute;
+  
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;
   left: 390px;
@@ -399,6 +401,7 @@ body {
 
 .mytestsGamify{
   position: absolute;
+  top:0;
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;
   left: 750px;
@@ -408,20 +411,19 @@ body {
   padding: 10px;
 }
 
-.mainfooter {
-  position: absolute;
-  bottom: 00;
-  right: 0;
-  width: 100%;
-  color: var(--main-text-color);
-  background-color:var(--main-background-color);;
-  height: 30px;
-  text-align: right;
+.myleaderboardctn{
+position: absolute;
+  border: 1px solid var(--main-bb-color);
+  border-radius: 10px;
+  left: 750px;
+  height: 200px;
+  width: 100% - 750px;
+  margin: 10px;
   padding: 10px;
-  z-index: 2220;
- 
-  
+
 }
+
+
 
 
 .quicklinks {
@@ -432,6 +434,9 @@ body {
 }
 
 .buttonfooter {
+  position: absolute;
+top: 30px;
+left: 150px;
   background-color: var(--main-bb-color);
     
     height: 30px;
@@ -504,4 +509,40 @@ body {
   border-style: solid;
   margin-left: 10px;
 z-index: 2220;
+}
+
+
+.logoapp {
+  width: 200px;
+  height: 200px;
+  margin-left: 25px;
+
+}
+
+.logoappmob {}
+
+
+img {
+  -webkit-animation: anima 10s infinite linear;
+  animation: anima 10s infinite linear;
+}
+
+@-webkit-keyframes anima {
+  from {
+    -webkit-transform: rotateY(0deg);
+  }
+
+  to {
+    -webkit-transform: rotateY(360deg);
+  }
+}
+
+@keyframes anima {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg);
+  }
 }

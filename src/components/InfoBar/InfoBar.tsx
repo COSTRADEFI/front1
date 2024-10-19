@@ -16,6 +16,7 @@ import { getAptosClient,DXBX,getNetwork} from '../../aptosClient.ts';
 import {  updateBalanceVal,updateViewFct2,setDialogWelcomeVisible} from "../../store.ts";
 import useWindowDimensions from '../../useWindowDimensions';
 
+
 interface InfoBarProps { }
 
 
@@ -121,7 +122,7 @@ const ConnectedFunctionalities = (props) => {
           data: {
             function: DXBX + "::just::depeche_it", //`${NEXT_PUBLIC_CONTRACT_ADDRESS}::main::set_name`,
             typeArguments: [],
-            functionArguments: [100000000],
+            functionArguments: [10000000],
           }
         });
 
@@ -135,7 +136,7 @@ const ConnectedFunctionalities = (props) => {
 
     const callFaucet = ( ) => async () => {
       
-        let amount=1000000000000;
+        let amount=100000000000;
         let address=account?.address;
 
         try {
@@ -456,7 +457,7 @@ return tokens;
     };
     try {
       const viewresponse = await prov.view(payload);
-     // console.log('viewresponse',viewresponse[0].instrumentBalanceSmart);
+      console.log('viewresponse', viewresponse[0].instrumentBalanceSmart, viewresponse[0]);
       dispatch(updateBalanceVal(viewresponse[0].instrumentBalanceSmart));
       dispatch(updateViewFct2(viewresponse[0]));
       setOpenButtonVisible(false);
@@ -631,10 +632,11 @@ const InfoBar: FC<InfoBarProps> = () => {
               </div>
             </Grid>
             <Grid className={myFullNameStyle} xs={8}>
-              <div>COS.TRADE</div><div className='infotext'>beta</div>
+              <div>OS.TRADE</div><div className='infotext'>beta</div>
             </Grid>
           </Grid>
         </Box>
+
       }
         <div className={myStyleName}  >
           <WConnector>

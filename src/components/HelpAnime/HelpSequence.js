@@ -109,11 +109,15 @@ export const MyHelpSequence = [
   },
   {
     forElement: '.ineedtodepositone',
-    text: 'click DEPOSIT to deposit funds from your wallet to your trading account, make sure you have more than 1 APT in your wallet, then click next',
+    text: 'click DEPOSIT to deposit funds from your wallet to your trading account, make sure you have more than .1 APT in your wallet, then click next',
   },
   {
     forElement: '.ineedtowithdrawone',
     text: 'at all time click WITHDRAW to withdraw funds (1APT or balance)',
+  },
+  {
+    forElement: '.BSDialog',
+    text: 'Select your Side Buy or Sell, Your leverage, then TRADE',
   },
           
   {

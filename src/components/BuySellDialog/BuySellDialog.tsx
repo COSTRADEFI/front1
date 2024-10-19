@@ -13,7 +13,7 @@ import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 export const BuySellDialog = (props) => {
  // const stakeValueRef = React.useRef();
   const [isDlgBuy, setIsDlgBuy] = useState(props.isDlgBuy);
-  const [sliderValue, setSliderValue] = React.useState(22);
+  const [sliderValue, setSliderValue] = React.useState(50);
 
   //const [sliderStakeValue, setSliderStakeValue] = React.useState(1);
   
@@ -42,8 +42,10 @@ export const BuySellDialog = (props) => {
 
   
   const sliderStakeChanged = (value) => {
-    let myval=Math.max(1,value) *userBalance/100000000 ;
-    setSliderValue(Math.max(1,value) );
+   // let myval=Math.max(1,value) *userBalance/100000000 ;
+
+    let myval =(value*1.0 )+50;
+    setSliderValue(Math.max(0,myval) );
 
    // setSliderStakeValue( parseInt(myval));
   }
@@ -114,21 +116,16 @@ return (
         SELL
       </Button>
     </div>
-
     
     <div className={styles.group_bsdlg_l4}>
       <div className={styles.multexplain1}> Leverage  </div>
-    
         <div className={styles.multexplain2}>{sliderValue }x</div>
         </div>
     
-    
-    <FormRange className={styles.formrange } value={sliderValue}  onChange={(e => sliderStakeChanged(e.target.value))}></FormRange>
-
+    <FormRange className={styles.formrange } value={sliderValue-50} onChange={(e => sliderStakeChanged(e.target.value))}></FormRange>
     <Container >
       <Row>
       < div className={styles.group_bsdlg_l4}>
-      
     
  <div className={styles.numberinput}  >{ (userBalance*sliderValue/100000000).toFixed(0) }   <img  className="aptlogo" src="Aptos_mark_WHT.svg"/>    </div>
 
