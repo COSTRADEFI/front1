@@ -1,0 +1,23 @@
+.tradeEventsWrapper {
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-top: 0px;
+    font-size: larger;
+    color: var(--main-text-highlight-color);
+    width: 100%;
+    overflow: auto;
+    height: 205px;
+}
+
+.tradeEventsWrapperSmall {
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-top: 0px;
+    font-size: normal;
+    color: var(--main-text-highlight-color);
+    width: 100%;
+    overflow: auto;
+    height: 105px;
+}

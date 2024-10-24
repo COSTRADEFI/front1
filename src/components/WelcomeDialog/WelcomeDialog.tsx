@@ -1,4 +1,4 @@
-import React, { FC,useState } from 'react';
+import React, { FC } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import styles from './WelcomeDialog.css';
 import {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const WelcomeDialog: FC<Props> = () => {
-    const { height, width } = useWindowDimensions();
+    const {  width } = useWindowDimensions();
     const dispatch = useDispatch();
    
     const dialogWelcomeVisible = useSelector((state) => state.clientReduxStore.dialogWelcomeVisible);
@@ -50,7 +50,7 @@ export const WelcomeDialog: FC<Props> = () => {
                     <p>You will never loose more than your DEPOSIT</p>
                     <a href="https://x.com/costrade_fi">
                     <div className='contactdiv' >
-                    <img className="xlogo" src="X_logo_2023_(white).png"/>@costrade_fi
+                    <img className="xlogo" src="X_logo_2023_(white).png" alt="logo twitter"/>@costrade_fi
                     </div>
                     </a>
                     

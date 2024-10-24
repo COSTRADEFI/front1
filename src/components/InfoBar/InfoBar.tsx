@@ -1,56 +1,42 @@
 import React, { FC } from 'react';
-import { useEffect, useRef,useState,useMemo } from 'react';
-import styles from './InfoBar.module.css';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { AptosConfig, Aptos } from '@aptos-labs/ts-sdk';
 import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 import Grid from '@mui/material/Unstable_Grid2';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import { ViewRequest,AptosAccount, Provider, Network} from "aptos";
+import { ViewRequest,AptosAccount, Provider} from "aptos";
 import { getAptosClient,DXBX,getNetwork} from '../../aptosClient.ts';
 import {  updateBalanceVal,updateViewFct2,setDialogWelcomeVisible} from "../../store.ts";
 import useWindowDimensions from '../../useWindowDimensions';
-
-
 interface InfoBarProps { }
-
-
 const WConnector = () => { 
-  const {height, width} = useWindowDimensions();
+  //const {height, width} = useWindowDimensions();
   const dispatch = useDispatch();
-  const dialogWelcomeVisible = useSelector((state: any) => state.clientReduxStore.dialogWelcomeVisible);
- 
-  const {
+  //const dialogWelcomeVisible = useSelector((state: any) => state.clientReduxStore.dialogWelcomeVisible);
+   const {
     connected,
   } = useWallet();
   
   useEffect(() => {
-    
-    { connected && <ConnectedFunctionalities /> }
-
+      connected && <ConnectedFunctionalities /> 
   }, [connected]);
 
   const depositBlinking = () => {
     if (connected) { 
-     // console.log('connected', connected);
       return '';
     }
     else {
-     // console.log('not connected', connected);
       return 'connect-button-browser borderBlink';
     }
-   
   }
   
   const showMePlease = ( ) => async () => 
   {
     dispatch(setDialogWelcomeVisible(true));
-    
   }
 
   return (
@@ -64,15 +50,12 @@ const WConnector = () => {
   )
 }
 
-
 const ConnectedFunctionalities = (props) => {
     const aptosClient = getAptosClient();
     const [myWalletBalance, setMyWalletBalance] = useState(0);
     const dispatch = useDispatch();
-  const [openButtonVisible, setOpenButtonVisible] = useState(false);
-  //const [isOwner, setIsOwner] = useState(false);
-  let isOwner:boolean = false;
-  
+    const [openButtonVisible, setOpenButtonVisible] = useState(false);
+   // let isOwner:boolean = false;
     const {
       account,
       connected,
@@ -80,28 +63,24 @@ const ConnectedFunctionalities = (props) => {
       disconnect,
       signAndSubmitTransaction,
     } = useWallet();
-   
-  let myclient = getAptosClient();
+    let myclient = getAptosClient();
   
     useEffect(() => {
       const interval = setInterval(() => { view_fct_2(); }, 1000);
-      const interval2 = setInterval(() => { fetchWalletBalance(); }, 5000);
+      const interval2 = setInterval(() => { fetchWalletBalance(); }, 1500);
       return () => {
         clearInterval(interval);
         clearInterval(interval2);
-
-      };
+       };
     }, [ connected]);
-    
-
-    if (connected) {
-      if (account?.address === DXBX) {
-        isOwner = true;
-      }
+    // if (connected) {
+    //   if (account?.address === DXBX) {
+    //     isOwner = true;
+    //   }
      
-    }
+    // }
   
-  const {tradingBalance,setTradingBalance} = useState(0);
+ // const {tradingBalance,setTradingBalance} = useState(0);
 
 
     const showMePlease = ( ) => async () => 
@@ -113,26 +92,26 @@ const ConnectedFunctionalities = (props) => {
     const userBalance = useSelector((state: any) => state.clientReduxStore.balance)*1.0;
   const userMarginBalance = useSelector((state: any) => state.clientReduxStore.margin)*1.0;
   
-    const submitTransactionD = ()=> async () => {
-      if (!account || !network) return;
+    // const submitTransactionD = ()=> async () => {
+    //   if (!account || !network) return;
     
-      try {
-        const response = await signAndSubmitTransaction({
-          sender: account.address,
-          data: {
-            function: DXBX + "::just::depeche_it", //`${NEXT_PUBLIC_CONTRACT_ADDRESS}::main::set_name`,
-            typeArguments: [],
-            functionArguments: [10000000],
-          }
-        });
+    //   try {
+    //     const response = await signAndSubmitTransaction({
+    //       sender: account.address,
+    //       data: {
+    //         function: DXBX + "::just::depeche_it", //`${NEXT_PUBLIC_CONTRACT_ADDRESS}::main::set_name`,
+    //         typeArguments: [],
+    //         functionArguments: [10000000],
+    //       }
+    //     });
 
-      let myresponse= await aptosClient.waitForTransaction({ transactionHash: response.hash });
-      console.log('myresponse',myresponse);
+    //   let myresponse= await aptosClient.waitForTransaction({ transactionHash: response.hash });
+    //   console.log('myresponse',myresponse);
 
-      }catch(error:any){
-        console.error(error);
-      }
-    }
+    //   }catch(error:any){
+    //     console.error(error);
+    //   }
+    // }
 
     const callFaucet = ( ) => async () => {
       
@@ -151,99 +130,6 @@ const ConnectedFunctionalities = (props) => {
         
     }
 
-  
-  const lcreateNFT = async (  ) => {
-      if (!account) {
-        throw new Error('Please connect your wallet first');
-      }
-    
-    let collectionName: string = "Accounts";
-    let uri: string = "https://f5c4dfa0fe2c14e113d9881788a255fa.blok.host/logo192.png";
-    let description: string = "costrade account";
-    let name: string = "costrade"+account.address;
-    let royalty: number = 0;
-
-   
-        const response = await signAndSubmitTransaction({
-          sender: account.address,
-          data: {
-            function:`${DXBX}::factory::mint_token`,
-            typeArguments: [],
-            functionArguments:  [collectionName,description,name,royalty, uri],
-          }
-        });
-        let myresult = await myclient.waitForTransaction({ transactionHash: response.hash });
-       return response.hash;
-  }
-  
-  
-  const callcreateNFT = ( ) => async () => {
-      
-     try {
-          let result = await lcreateNFT();
-          console.log('lcreateNFT',result);
-        }catch(error:any){
-          console.error(error);
-        }
-        
-    }
-  
-  
-  
-  
-  const callCollection = ( ) => async () => {
-      
-     try {
-          let result = await lcreateCollection();
-          console.log('callCollection',result);
-        }catch(error:any){
-          console.error(error);
-        }
-        
-    }
-  
-  
-  //function handleCreateCollection() {
-const handleCreateCollection = async ()=>{
-    try {
-      // Call the createCollection function from aptos.ts
-     //   console.log('handleCreateCollection',newCollectionName, newCollectionUri, newCollectionDesc);
-       let result = await lcreateCollection();
-        console.log('handleCreateCollection****************************************************************',result);
-      // Update the collections state or refetch collections
-     
-     } catch (error) {
-       console.error('Error creating collection:', error);
-       // Handle errors here
-     }
-  };
-  
-const lcreateCollection = async () => {
-    //notifToast("Creating Collection, Great");
-      if (!account) {
-        throw new Error('Please connect your wallet first');
-      }
-  try {
-    let collectionName: string = "Accounts2";
-    let uri: string = "https://f5c4dfa0fe2c14e113d9881788a255fa.blok.host/logo192.png";
-    let description: string = "costrade accounts";
-
-        const response = await signAndSubmitTransaction({
-          sender: account.address,
-          data: {
-            function:`${DXBX}::factory::create_collection`,
-            typeArguments: [],
-            functionArguments:  [collectionName, uri, description],
-          }
-        });
-        let myresult = await myclient.waitForTransaction({ transactionHash: response.hash });
-       return response.hash;
-      } catch (error: any) {
-         
-        //return null;
-      }
-    }
-  
     const submitdxbx = (functionName: string, myparam:number =0,myleverage:number=50 ) => async () => {
       if (!account || !network) return;
       if (network?.name !== getNetwork()) {
@@ -348,7 +234,7 @@ const lcreateCollection = async () => {
       console.log('disconnectWallet',connected, account?.address);
       dispatch(updateBalanceVal(0));
     try{
-      const response = await disconnect();
+      await disconnect();
     }catch(error){
       console.log('error catch disconnect',error);
       window.location.reload(false);
@@ -357,24 +243,24 @@ const lcreateCollection = async () => {
  
 
 
- type AccountAPTBalanceArguments = {
-  accountAddress: string;
-};
+//  type AccountAPTBalanceArguments = {
+//   accountAddress: string;
+// };
 
- const accountAPTBalance = async (args: AccountAPTBalanceArguments): Promise<number> => {
-  const { accountAddress } = args;
-  const balance = await myclient().view<[number]>({
-    payload: {
-      function: "0x1::coin::balance",
-      typeArguments: ["0x1::aptos_coin::AptosCoin"],
-      functionArguments: [accountAddress],
-    },
-  });
-  return balance[0];
-};
+//  const accountAPTBalance = async (args: AccountAPTBalanceArguments): Promise<number> => {
+//   const { accountAddress } = args;
+//   const balance = await myclient().view<[number]>({
+//     payload: {
+//       function: "0x1::coin::balance",
+//       typeArguments: ["0x1::aptos_coin::AptosCoin"],
+//       functionArguments: [accountAddress],
+//     },
+//   });
+//   return balance[0];
+// };
 
 
-  const lgetFABalance = async () => {
+//  const lgetFABalance = async () => {
 // let myquery="query GetFungibleAssetBalances($address: String, $offset: Int) {  current_fungible_asset_balances( \
 //     where: {owner_address: {_eq: \"0xc4d40ddeab3a45bdd2621d980da2b56f9ac41ddf6f68058e2b800641e945c637\"}, asset_type: {_eq: \"0x000000000000000000000000000000000000000000000000000000000000000a\"}} \
 //     offset: 0 \
@@ -401,7 +287,7 @@ const lcreateCollection = async () => {
     //  });
    //return objects;
    //console.log(account.address);
-    const tokens = await myclient.getAccountOwnedTokens({ accountAddress: account?.address });
+  //  const tokens = await myclient.getAccountOwnedTokens({ accountAddress: account?.address });
    //console.log('tokens',tokens); 
 
 
@@ -415,13 +301,13 @@ const lcreateCollection = async () => {
 // const variables = { owner_address: "0xc4d40ddeab3a45bdd2621d980da2b56f9ac41ddf6f68058e2b800641e945c637" };
 // const graphqlQuery = { query, variables };
 // const accountTokensCount = await myclient.queryIndexer(graphqlQuery);
-return tokens;
+// return tokens;
 
-  }
+//   }
 
   const fetchWalletBalance = async () => {
-    const data = await lgetFABalance();
-  //  console.log('fetchWalletBalance FA',data);
+    // const data = await lgetFABalance();
+    // console.log('fetchWalletBalance FA',data);
     
 
 
@@ -457,7 +343,7 @@ return tokens;
     };
     try {
       const viewresponse = await prov.view(payload);
-      console.log('viewresponse', viewresponse[0].instrumentBalanceSmart, viewresponse[0]);
+      //console.log('viewresponse', viewresponse[0].instrumentBalanceSmart, viewresponse[0]);
       dispatch(updateBalanceVal(viewresponse[0].instrumentBalanceSmart));
       dispatch(updateViewFct2(viewresponse[0]));
       setOpenButtonVisible(false);
@@ -468,13 +354,13 @@ return tokens;
     } 
   }
 
-  function formatAddress(account: AptosAccount) {
-    return account.address.toString().slice(0, 6) + "..." + account.address.toString().slice(-6);
-  }
+  // function formatAddress(account: AptosAccount) {
+  //   return account.address.toString().slice(0, 6) + "..." + account.address.toString().slice(-6);
+  // }
 
-  function formatBalance(balance: number) {
-    return balance/10e7;
-  }
+  // function formatBalance(balance: number) {
+  //   return balance/10e7;
+  // }
 
  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
  const open = Boolean(anchorEl);
@@ -589,21 +475,10 @@ return tokens;
 }
 
 const InfoBar: FC<InfoBarProps> = () => {
-  const {height, width} = useWindowDimensions();
-  
-  const {
-    connected,
-    account,
-    
-  } = useWallet();
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (connected) {
-     // console.log('WConnectorConnected useEffecti', connected);
-    }
-    { connected && <ConnectedFunctionalities /> }
-
+  const {width} = useWindowDimensions();
+  const {   connected } = useWallet();
+    useEffect(() => {
+      { connected && <ConnectedFunctionalities /> }
   }, [connected]);
 
   let myStyleName='walletConnector';

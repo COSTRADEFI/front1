@@ -1,28 +1,12 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { useWallet, InputTransactionData } from "@aptos-labs/wallet-adapter-react";
-//import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { Aptos,AptosConfig ,Network} from "@aptos-labs/ts-sdk";
+import { Aptos,AptosConfig} from "@aptos-labs/ts-sdk";
 import { List, Input } from "antd";
-
-//import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import { Button,Row, Col } from 'react-bootstrap';
-
 import './TrollCommunity.css';
-
-import { getAptosClient,DXBX,TROLLCOMMUNITY,getNetwork} from '../../aptosClient.ts';
-
-  
-//let aptos = getAptosClient();
-  
+import { TROLLCOMMUNITY,getNetwork} from '../../aptosClient.ts';
 const config = new AptosConfig({ network: getNetwork() });
 let aptos = new Aptos(config);
-
-
-
 
 type Task = {
   address: string;
@@ -31,15 +15,7 @@ type Task = {
   task_id: string;
 };
 
-
-
-
-// change this to be your module account address
-export const moduleAddress = TROLLCOMMUNITY; //"0x13a9f1a109368730f2e355d831ba8fbf5942fb82321863d55de54cb4ebe5d18f";
-
-
-
-
+export const moduleAddress = TROLLCOMMUNITY; 
 
 interface Props {
 }
@@ -52,7 +28,7 @@ const TrollCommunity = (props: Props) => {
   const { account, signAndSubmitTransaction } = useWallet();
   const [accountHasList, setAccountHasList] = useState<boolean>(false);
   const [transactionInProgress, setTransactionInProgress] = useState<boolean>(false);
-  const [canCompleteTask, setCanCompleteTask] = useState<boolean>(false);
+  //const [canCompleteTask, setCanCompleteTask] = useState<boolean>(false);
 
   const onWriteTask = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -86,33 +62,33 @@ const TrollCommunity = (props: Props) => {
       counter++;
     }
 		// set tasks in local state
-    setTasks(tasks.reverse().slice(0, 3));
+    setTasks(tasks.reverse().slice(0, 12));
   } catch (e: any) {
     setAccountHasList(false);
   }
 };
-  const addNewList = async () => {
-    if (!account) return [];
-    setTransactionInProgress(true);
+  // const addNewList = async () => {
+  //   if (!account) return [];
+  //   setTransactionInProgress(true);
 
-    const transaction:InputTransactionData = {
-      data:{
-        function:`${moduleAddress}::todolist::create_list`,
-        functionArguments:[]
-      }
-    }
-    try {
-      // sign and submit transaction to chain
-      const response = await signAndSubmitTransaction(transaction);
-      // wait for transaction
-      await aptos.waitForTransaction({transactionHash:response.hash});
-      setAccountHasList(true);
-    } catch (error: any) {
-      setAccountHasList(false);
-    } finally {
-      setTransactionInProgress(false);
-    }
-  };
+  //   const transaction:InputTransactionData = {
+  //     data:{
+  //       function:`${moduleAddress}::todolist::create_list`,
+  //       functionArguments:[]
+  //     }
+  //   }
+  //   try {
+  //     // sign and submit transaction to chain
+  //     const response = await signAndSubmitTransaction(transaction);
+  //     // wait for transaction
+  //     await aptos.waitForTransaction({transactionHash:response.hash});
+  //     setAccountHasList(true);
+  //   } catch (error: any) {
+  //     setAccountHasList(false);
+  //   } finally {
+  //     setTransactionInProgress(false);
+  //   }
+  // };
 
   const onTaskAdded = async () => {
     // check for connected account
@@ -159,61 +135,42 @@ const TrollCommunity = (props: Props) => {
     }
   };
 
-  // const onCheckboxChange = async (event: CheckboxChangeEvent, taskId: string) => {
-    
-
-  //   if (!account) return;
-  //   ///only moduleaddress can complete task
-  //   if (account.address !== moduleAddress) {
-  //     alert("Only the module address can complete tasks"); 
-  //     return;
-  //   }
-
-  //   if (!event.target.checked) return;
-  //   setTransactionInProgress(true);
-
-  //   const transaction:InputTransactionData = {
-  //     data:{
-  //       function:`${moduleAddress}::todolist::complete_task`,
-  //       functionArguments:[taskId]
-  //     }
-  //   }
-
-  //   try {
-  //     // sign and submit transaction to chain
-  //     const response = await signAndSubmitTransaction(transaction);
-  //     // wait for transaction
-  //     await aptos.waitForTransaction({transactionHash:response.hash});
-
-  //     setTasks((prevState) => {
-  //       const newState = prevState.map((obj) => {
-  //         // if task_id equals the checked taskId, update completed property
-  //         if (obj.task_id === taskId) {
-  //           return { ...obj, completed: true };
-  //         }
-
-  //         // otherwise return object as is
-  //         return obj;
-  //       });
-
-  //       return newState;
-  //     });
-  //   } catch (error: any) {
-  //     console.log("error", error);
-  //   } finally {
-  //     setTransactionInProgress(false);
-  //   }
-  // };
-
   useEffect(() => {
-    
-    fetchList();
-    // if (account && account.address === moduleAddress) {
-    //   setCanCompleteTask(true);
-    // }else{
-    //   setCanCompleteTask(false);
-    // }
+   
+   // fetchList();
+    const interval2 = setInterval(() => {
+      fetchList();
+    }, 1000);
+      return () => {
+        clearInterval(interval2);
+      };
   }, [account]);
+
+/*
+useEffect(() => {
+    const fetchNFTs = async () => {
+        try {
+          const data = await lgettradeEvents();
+          settradeEvents(data);
+        } catch (error) {
+          console.error('Error fetching TradeEvents:', error);
+          // Handle errors gracefully (e.g., show error message to user)
+        } finally {
+          //setLoading(false);
+        }
+    };
+
+    const interval2 = setInterval(() => {
+      fetchNFTs();
+    }, 1000);
+      return () => {
+        clearInterval(interval2);
+      };
+  },[] );
+  */
+
+
+
 
 
 

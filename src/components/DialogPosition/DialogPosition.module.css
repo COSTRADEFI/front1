@@ -96,8 +96,6 @@
 
   
 .texthighlighted{
-
-
   font-size: x-large;
   font-weight: bolder;
   color: white;
@@ -107,6 +105,18 @@
   padding: 0px !important;
   margin: 0px !important;
 }
+
+.texthighlightedmobile{
+  font-size: large;
+  font-weight: bolder;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  align-items: center !important;
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
 
 .btnClose{
   color: var(--main-bb-color) ;
@@ -178,4 +188,36 @@
   text-align: center;
   padding: 10px;
   margin: 10px;
+}
+
+.hgreen{
+  color: rgb(118, 240, 118);
+} 
+
+.hg1{
+  color: rgb(210, 238, 192);
+} 
+
+.hg2{
+  color: rgb(201, 219, 168);
+}
+
+.hg3{
+  color: rgb(233, 230, 77);
+}
+
+.hg4{
+  color: rgb(235, 180, 62);
+}
+
+.hg5{
+  color: rgb(240, 104, 41);
+}
+
+.hg6{
+  color: rgb(170, 13, 8);
+}
+
+.hg7{
+  color: rgb(122, 10, 20);
 }

@@ -96,6 +96,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+    
 }
 
 
@@ -135,7 +136,8 @@ body {
   border-radius: 10px;
   z-index:250;
   padding:0px;
-  margin:0px
+  margin:0px;
+  
 }
 
 
@@ -154,7 +156,7 @@ body {
   justify-content: center;
   text-align: center;
   z-index: 250;
-   
+
 
 }
 
@@ -198,13 +200,14 @@ body {
 
 .notifsmall {
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
   width: 100%;
   background-color: rgb(8, 6, 2);
   height: 65px;
   border-radius: 10px;
+ 
+  z-index: 250;
   
-  z-index: 0;
 }
 
 .notifbar {
@@ -357,50 +360,37 @@ body {
 }
 
 .mobileViewPosition {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%-20px;
-    padding: 10px;
-
+  padding: 10px;
 
 }
 
-.myeventsctn {
+.mycomponentposition{
   position: absolute;
-  
-  
+  width: 100%;
+}
+
+.myeventsctn {
   border: 1px solid var(--main-bb-color); 
   border-radius: 10px;
-  width: 360px;
-  height: 200px;
+ 
   margin: 10px;
   padding: 10px;
 }
  
-
-.TradeEventsWrapper{
- 
-    font-size: larger;
-    align-items: right;
-    color: var(--main-text-highlight-color);
-    width: 100%;
-} 
-
-
 .mytrolleventsctn {
-  
-  position: absolute;
-  
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;
   left: 390px;
   height: 200px;
-  width: 330px;
+  
   margin: 10px;
   padding: 10px;
 }
 
 .mytestsGamify{
-  position: absolute;
   top:0;
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;
@@ -411,8 +401,13 @@ body {
   padding: 10px;
 }
 
+.icanscroll{
+  overflow: auto;
+  
+}
+
 .myleaderboardctn{
-position: absolute;
+
   border: 1px solid var(--main-bb-color);
   border-radius: 10px;
   left: 750px;
@@ -513,13 +508,20 @@ z-index: 2220;
 
 
 .logoapp {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height:180px;
   margin-left: 25px;
 
 }
 
-.logoappmob {}
+.logoappmob {
+  position: absolute;
+  width: 100%;
+  max-width: 48px;
+  margin: 10px;
+    
+  z-index: 1500;
+}
 
 
 img {

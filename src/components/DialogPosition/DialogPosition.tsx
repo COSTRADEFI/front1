@@ -1,83 +1,51 @@
-import React, { FC,useEffect } from 'react';
-import styles from './DialogPosition.module.css';
-import { useSelector, useDispatch } from "react-redux";
-import { Button, Form,Row, Col, Container } from 'react-bootstrap';
-//import "bootstrap/dist/css/bootstrap.css";
+import React, { FC, useState} from 'react';
+import { useSelector } from "react-redux";
+import { Button} from 'react-bootstrap';
 import Grid from '@mui/material/Unstable_Grid2';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { getAptosClient} from '../../aptosClient.ts';
 import { DXBX } from '../../aptosClient.ts';
 import useWindowDimensions from '../../useWindowDimensions';
 import CountUp from "react-countup";
-import {
-  newRandomVal,
-  newResultVal,
-  setAnimationVal,
-  updateBalanceVal,
-} from "./store.ts";
+import { TypeTagParser } from 'aptos';
 
 const aptosClient = getAptosClient();
-
 interface DialogPositionProps { }
-
-
-
-//const userBalance = useSelector((state: any) => state.clientReduxStore.balance);
-
 const DialogPosition: FC<DialogPositionProps> = () => {
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const {
     account,
     connected,
     network,
-    disconnect,
     signAndSubmitTransaction,
   } = useWallet();
-
-
-  //export default  DialogPosition = (props) => {
   const userBalance = useSelector((state: any) => state.clientReduxStore.balance) * 0.00000001;
   const userContractBalance = useSelector((state: any) => state.clientReduxStore.ctbalance);
   const userMarginBalance = useSelector((state: any) => state.clientReduxStore.margin) * 0.00000001;
   const userSideLong = useSelector((state: any) => state.clientReduxStore.sidelong);
+  const indexValue = useSelector((state: any) => state.clientReduxStore.lastRandomVal);
+  let mycolor = '#0000';
+  const [lastUserBalance,setLastUserBalance]=useState(0);
+  const [myhStyle,setMyhStyle]=useState('hgreen');
 
-  //const userTotalBalance = (useSelector((state: any) => (state.clientReduxStore.margin + state))*0.00000001);
-
-  //const userIndexPosition = useSelector((state: any) => state.clientReduxStore.indexPosition);
-  //const userSmartTableLength = useSelector((state: any) => state.clientReduxStore.smartTableLength);
-  //const userAvailable = useSelector((state: any) => state.clientReduxStore.available);
-
-  
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    //textAlign: 'center',
-    //color: theme.palette.text.secondary,
-  }));
-  
 let sideLS='';
 let opsideLS='';
+let sideNumber=0;
 if (userContractBalance>0){
   if (userSideLong){
     sideLS='BUY';
     opsideLS='Short';
+    sideNumber=1;
   }else{
     sideLS='SELL';
     opsideLS='Long';
+    sideNumber=-1;
   }
 }else{
   sideLS='-';
-  opsideLS='-';
-}
-
-
-
  
+}
   const submitClosePosition = async () => {
     if (!account || !network) return;
   try {
@@ -115,32 +83,85 @@ let isSmall=false;
  
   
   let switchs:boolean = false;
+
+  let myHealthStyle = {}; 
+  let toPrint=0;
+  let toPrint10x=0;
+  let mytempVal=0;
+//  const [toprint,setToPrint] = React.useState(0);
+  
   
   function onChange() {
+  
     
+    toPrint=((1-(sideNumber*userBalance)/userContractBalance)*indexValue);
+
+    toPrint10x=((1+(10*sideNumber*userBalance)/userContractBalance)*indexValue);
+
+    if (!isFinite(toPrint)){
+      toPrint=0;
+    }
+
+    let myvalue=userContractBalance/(userBalance+userMarginBalance);
+    let myhStyle;
+    let myVal=0;
+    
+
+    if(myvalue<25){
+      myhStyle='hgreen';
+      myVal=0;
+    }else if(myvalue<35){
+      myhStyle='hg1';
+      myVal=1;
+
+    } else
+    if(myvalue<45){
+      myhStyle='hg2';
+      myVal=2;
+    } else
+    if(myvalue<55){
+      myhStyle='hg3';
+      myVal=3;
+    } else
+    if(myvalue<65){
+      myhStyle='hg4';
+      myVal=4;
+    }else if(myvalue<75){
+      myhStyle='hg5';
+      myVal=5;
+    }else if(myvalue<85){
+      myhStyle='hg6';
+      myVal=6;
+    }else   if(myvalue<200){
+      myhStyle='hg7';
+      myVal=7;
+    }
+    else{
+      myhStyle='hgreen';
+      myVal=0;
+    }
+
+    if(isSmall){
+      myhStyle=myhStyle+' texthighlightedmobile';
+    } else{
+      myhStyle=myhStyle+' texthighlighted';
+    }
+    if (mytempVal!=myVal){
+      mytempVal=myVal;
+      if ("vibrate" in navigator) {
+        navigator.vibrate(100);
+      }
+    }
+    myHealthStyle=myhStyle;
     if (switchs) {
       switchs= false;
-      document.querySelector('.dialogposition').className = 'dialogposition fadeInSell';
-  } else {
+    //  document.querySelector('.dialogpositionlarge').className = 'fadeInSell';
+    } else {
       switchs = true;
-  //    document.querySelector('.fadeInSell').className = 'dialogpositionlarge fadeInBuy';
-    
+      //    document.querySelector('.fadeInSell').className = 'dialogpositionlarge fadeInBuy';
   }
     
   }
-
-
-const dialogpositionlargeFade = () => {
-    if (switchs ) { 
-      return 'dialogpositionlarge fadeInSell';
-    }
-    else {
-      return 'dialogpositionlarge fadeInSell';
-
-    }
-  }
-
-
 
  return(
     <div >
@@ -150,35 +171,46 @@ const dialogpositionlargeFade = () => {
         <Grid container  spacing={2} columns={15} >
         
           
-          <Grid className='textnormal' xs={3}>
+          <Grid className='textnormal' xs={2}>
             <div>Available</div>
           </Grid>
-        <Grid className='textnormal' xs={3}>
+        <Grid className='textnormal' xs={2}>
             <div >Contract Margin</div>
            </Grid>
-           <Grid className='textnormal' xs={3}>
-            <div>
-              Trading Balance</div>
-          </Grid>
+           <Grid className='textnormal' xs={2}>
           
-          <Grid className='textnormal' xs={3}>
             <div>Leverage</div>
           </Grid>
           <Grid className='textnormal' xs={2}>
+          <div>
+              Trading Balance</div>
+          </Grid>
+          <Grid className='textnormal' xs={2}>
             <div>Contract <Button className='btnClose' onClick={() => {closePosition(); }} >Close</Button></div>
+          </Grid>
+          <Grid className='textnormal' xs={2}>
+            <div>Liq EST.</div>
+          </Grid>
+          <Grid className='textnormal' xs={2}>
+            <div>10X EST.</div>
           </Grid>
           <Grid className='textnormal' xs={1}>
             <div></div>
           </Grid>
     {connected && (<>
           
-          <Grid className='textnormaldata' xs={3}   onChange={onChange()}>
-            <a>{(userBalance).toFixed(4)}</a>
+          <Grid className='textnormaldata' xs={2}   onChange={onChange()}>
+            {(userBalance).toFixed(4)}
           </Grid>
-          <Grid className='textnormaldata' xs={3}>
-            <a>{userMarginBalance.toFixed(4)}</a>
+          <Grid className='textnormaldata' xs={2}>
+            {userMarginBalance.toFixed(4)}
              </Grid>
-             <Grid xs={3} className="texthighlightedXX">
+             
+          
+          <Grid  xs={2}>
+            <div className={myHealthStyle}>{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
+          </Grid>
+          <Grid xs={2} className="texthighlightedXX">
                
                 <CountUp 
               start={0}
@@ -192,45 +224,44 @@ const dialogpositionlargeFade = () => {
               suffix=""
             ></CountUp>
           </Grid>
-          
-          <Grid  xs={3}>
-            <div className='texthighlighted'>{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
+          <Grid  xs={2}>
+            <div className= {myHealthStyle}> {sideLS}{' '}{userContractBalance}      </div>   
           </Grid>
           <Grid  xs={2}>
-            <div className='texthighlighted'>{sideLS}{' '}{userContractBalance}      </div>   
+            <div className={myHealthStyle} >{toPrint.toFixed(2)}      </div>   
           </Grid>
-          <Grid xs={1}>
-           
-          </Grid> </>)}
+          <Grid  xs={2}>
+            <div className={myHealthStyle} >{toPrint10x.toFixed(2)}      </div>   
+          </Grid>
+           </>)}
         </Grid>
   </Box>
 
   </div>)}
   {isSmall && ( <div className='dialogpositionsmall'>
-  <Box sx={{ flexGrow: 1 }}>
-        <Grid container  spacing={2} columns={9} >
-        
-          
+  
+        <Grid container  spacing={1} >
+                  
         
            <Grid className='textnormal' xs={4}>
             <div>
               Trading Balance</div>
           </Grid>
           
-          <Grid className='textnormal' xs={2}>
+          <Grid className='textnormal' xs={3}>
             <div>Leverage</div>
           </Grid>
-          <Grid className='textnormal' xs={2}>
+          <Grid className='textnormal' xs={3}>
             <div>Contract <Button className='btnClose' onClick={() => {closePosition(); }} >Close</Button></div>
            </Grid>
-           <Grid className='textnormal' xs={1}>
-            
+           <Grid className='textnormal' xs={2}>
+            <div>Liq EST.</div>
           </Grid>
           
     {connected && (<>
           
         
-             <Grid xs={4} className="texthighlightedXX" style={{ marginLeft: '15px' } } >
+             <Grid xs={4} className="texthighlightedXX" style={{ marginLeft: '15px' } } onChange={onChange()}>
                
                 <CountUp 
               start={0}
@@ -246,18 +277,26 @@ const dialogpositionlargeFade = () => {
                
           </Grid>
           
-          <Grid  xs={2} >
-            <div className='texthighlighted' >{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
+          <Grid  xs={3}  >
+            <div className={myHealthStyle} >{ (userContractBalance/(userBalance+userMarginBalance)).toFixed(0) } X</div>       
           </Grid>
-          <Grid  xs={2}>
-            <div className='texthighlighted'>{sideLS}{' '}{userContractBalance}      </div>   
-             </Grid>
-             <Grid className='textnormal' xs={1}>
-            
+
+          <Grid  xs={3}>
+            <div className={myHealthStyle}>{sideLS}{' '}{userContractBalance}      </div>   
+         
           </Grid>
+             <Grid xs={1}>
+                           <div className={myHealthStyle}  >            
+          {toPrint.toFixed(0)} 
+          </div>
+          
+          </Grid>
+          
+          
+          
            </>)}
         </Grid>
-  </Box>
+  
 
 
   </div>)}

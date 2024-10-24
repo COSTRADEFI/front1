@@ -1,37 +1,25 @@
-import React, { useRef, FC,useState } from 'react';
+import React, { useState } from 'react';
 import styles from './BuySellDialog.module.css';
-import { Button, Form,Row, Col, Container } from 'react-bootstrap';
-import RangeSlider from 'react-bootstrap-range-slider';
+import { Button, Row,  Container } from 'react-bootstrap';
 import FormRange from "react-bootstrap/FormRange";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { getAptosClient} from '../../aptosClient.ts';
 import { DXBX } from '../../aptosClient.ts';
-import { ViewRequest,AptosAccount, Provider, Network} from "aptos";
-import { WalletConnector } from "@aptos-labs/wallet-adapter-mui-design";
 
 export const BuySellDialog = (props) => {
- // const stakeValueRef = React.useRef();
   const [isDlgBuy, setIsDlgBuy] = useState(props.isDlgBuy);
   const [sliderValue, setSliderValue] = React.useState(50);
-
-  //const [sliderStakeValue, setSliderStakeValue] = React.useState(1);
-  
   const userBalance = useSelector((state: any) => state.clientReduxStore.balance);
-
   const {
     showModalDlg,
     setshowModalDlg,
-    setDlgBuy,
   } = props;
 
   const aptosClient = getAptosClient();
-  const dispatch = useDispatch();
   const {
     account,
-    connected,
     network,
-    disconnect,
     signAndSubmitTransaction,
   } = useWallet();
 
@@ -42,12 +30,8 @@ export const BuySellDialog = (props) => {
 
   
   const sliderStakeChanged = (value) => {
-   // let myval=Math.max(1,value) *userBalance/100000000 ;
-
     let myval =(value*1.0 )+50;
     setSliderValue(Math.max(0,myval) );
-
-   // setSliderStakeValue( parseInt(myval));
   }
 
 
@@ -97,7 +81,6 @@ const submitTrade = async () => {
     
   }
 
-      const [value1, setValue1] = useState(1);
 
 return (
  
@@ -127,7 +110,7 @@ return (
       <Row>
       < div className={styles.group_bsdlg_l4}>
     
- <div className={styles.numberinput}  >{ (userBalance*sliderValue/100000000).toFixed(0) }   <img  className="aptlogo" src="Aptos_mark_WHT.svg"/>    </div>
+ <div className={styles.numberinput}  >{ (userBalance*sliderValue/100000000).toFixed(0) }   <img  className="aptlogo" src="Aptos_mark_WHT.svg" alt="logo aptos"/>    </div>
 
         <div className={styles.multexplain1}>  </div><div className={styles.multexplain11} >available balance: <div className={styles.multexplain111} >{(userBalance/100000000).toFixed(4)}</div></div>
         </div>
